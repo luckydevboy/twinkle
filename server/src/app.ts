@@ -1,16 +1,13 @@
 import { Hono } from "hono";
-import { logger } from 'hono/logger'
+import { logger } from "hono/logger";
 
-import { boardRoutes, columnRoutes } from "./routes";
+import { boardRoutes } from "./routes";
 
 const app = new Hono();
 
 app.use(logger());
 
-const apiRoutes = app.basePath("/api")
-  .route("/v1/boards", boardRoutes)
-// .route("/v1", columnRoutes)
+const apiRoutes = app.basePath("/api").route("/v1/boards", boardRoutes);
 
 export default app;
 export type ApiRoutes = typeof apiRoutes;
-
