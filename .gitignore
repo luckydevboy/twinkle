@@ -37,7 +37,6 @@ frontend/.vercel
 frontend/*.tsbuildinfo
 frontend/next-env.d.ts
 
-# server
-server/node_modules
-
 node_modules
+
+.env*
