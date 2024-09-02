@@ -6,6 +6,7 @@ import { boards as boardsTable, insertBoardsSchema } from "@/db/schema";
 import { db } from "@/db";
 
 export const boardRoutes = new Hono()
+  // Get boards
   .get("/", async (c) => {
     const boards = await db.select().from(boardsTable);
 
@@ -15,6 +16,7 @@ export const boardRoutes = new Hono()
       data: { boards },
     });
   })
+  // Create board
   .post("/", zValidator("json", insertBoardsSchema), async (c) => {
     const board = c.req.valid("json");
 
@@ -28,6 +30,7 @@ export const boardRoutes = new Hono()
       },
     });
   })
+  // Get board by ID
   .get(":id{[0-9]+}", async (c) => {
     const id = c.req.param("id");
     const board = await db
@@ -41,6 +44,7 @@ export const boardRoutes = new Hono()
       data: { board },
     });
   })
+  // Update board by ID
   .put("/:id{[0-9]+}", zValidator("json", insertBoardsSchema), async (c) => {
     const id = c.req.param("id");
     const board = c.req.valid("json");
@@ -56,6 +60,7 @@ export const boardRoutes = new Hono()
       data: { board },
     });
   })
+  // Delete board by ID
   .delete(":id{[0-9]+}", async (c) => {
     const id = c.req.param("id");
 
