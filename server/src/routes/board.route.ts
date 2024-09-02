@@ -1,9 +1,9 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
+import { eq } from "drizzle-orm";
 
 import { boards as boardsTable, insertBoardsSchema } from "@/db/schema";
 import { db } from "@/db";
-import { eq } from "drizzle-orm";
 
 export const boardRoutes = new Hono()
   .get("/", async (c) => {
@@ -11,7 +11,7 @@ export const boardRoutes = new Hono()
 
     c.status(200);
     return c.json({
-      status: "success",
+      success: true,
       data: { boards },
     });
   })
@@ -22,13 +22,13 @@ export const boardRoutes = new Hono()
 
     c.status(201);
     return c.json({
-      status: "success",
+      success: true,
       data: {
         board: result,
       },
     });
   })
-  .get("/:id", async (c) => {
+  .get(":id{[0-9]+}", async (c) => {
     const id = c.req.param("id");
     const board = await db
       .select()
@@ -37,18 +37,33 @@ export const boardRoutes = new Hono()
 
     c.status(200);
     return c.json({
-      status: "success",
+      success: true,
       data: { board },
     });
   })
-  .delete("/:id", async (c) => {
+  .put("/:id{[0-9]+}", zValidator("json", insertBoardsSchema), async (c) => {
+    const id = c.req.param("id");
+    const board = c.req.valid("json");
+
+    await db
+      .update(boardsTable)
+      .set(board)
+      .where(eq(boardsTable.id, Number(id)));
+
+    c.status(201);
+    return c.json({
+      success: true,
+      data: { board },
+    });
+  })
+  .delete(":id{[0-9]+}", async (c) => {
     const id = c.req.param("id");
 
     await db.delete(boardsTable).where(eq(boardsTable.id, Number(id)));
 
     c.status(204);
     return c.json({
-      status: "success",
+      success: true,
       data: null,
     });
   });
