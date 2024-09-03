@@ -68,20 +68,40 @@ export const columnRoutes = new Hono()
   // Reorder columns in a board
   .put(
     "board/:boardId{[0-9]+}/reorder",
-    zValidator("json", z.object({ columnIds: z.array(z.string()) })),
+    zValidator("json", z.object({ columnIds: z.array(z.number()) })),
     async (c) => {
       const boardId = c.req.param("boardId");
-      const { columnIds } = await c.req.json();
+      const { columnIds } = await c.req.valid("json");
 
-      const board = await db
+      const columns = await db
         .select()
-        .from(boardsTable)
-        .where(eq(boardsTable.id, Number(boardId)));
+        .from(columnsTable)
+        .where(eq(columnsTable.boardId, Number(boardId)));
+
+      const validColumnIds = columns.map((column) => column.id);
+      const isValid = columnIds.every((id) => validColumnIds.includes(id));
+
+      if (!isValid) {
+        c.status(400);
+        return c.json({
+          success: false,
+          message: "Invalid column IDs provided",
+        });
+      }
+
+      await Promise.all(
+        columnIds.map((columnId, index) =>
+          db
+            .update(columnsTable)
+            .set({ order: index + 1 })
+            .where(eq(columnsTable.id, Number(columnId))),
+        ),
+      );
 
       c.status(201);
       return c.json({
         success: true,
-        data: board,
+        message: "Columns reordered successfully.",
       });
     },
   );

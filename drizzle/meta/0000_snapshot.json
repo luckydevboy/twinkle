@@ -1,5 +1,5 @@
 {
-  "id": "7f6595dd-f412-4fa7-b8e0-713e8279d715",
+  "id": "6a3b289c-4df6-4db7-94d4-2c6d412c2fca",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -44,7 +44,7 @@
         },
         "board_id": {
           "name": "board_id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         }
@@ -78,7 +78,7 @@
         },
         "column_id": {
           "name": "column_id",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         }

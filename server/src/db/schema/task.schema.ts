@@ -1,4 +1,4 @@
-import { pgTable, serial, text, uuid } from "drizzle-orm/pg-core";
+import { integer, pgTable, serial, text } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -9,7 +9,7 @@ export const tasks = pgTable("tasks", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   description: text("description"),
-  columnId: text("column_id").notNull(),
+  columnId: integer("column_id").notNull(),
 });
 
 export const tasksRelations = relations(tasks, ({ one }) => ({
@@ -21,7 +21,7 @@ export const tasksRelations = relations(tasks, ({ one }) => ({
 
 export const insertTasksSchema = createInsertSchema(tasks, {
   name: z.string().min(1).max(20),
-  description: z.string().min(1),
-  columnId: z.string().nullable,
+  description: z.string().min(1).max(1000),
+  columnId: z.number().int(),
 });
 export const selectTasksSchema = createSelectSchema(tasks);

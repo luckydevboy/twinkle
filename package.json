@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "bun run --hot server/src/index.ts",
     "migration:generate": "pnpm drizzle-kit generate",
-    "migration:push": "bun run server/src/db/migrate.ts"
+    "migration:push": "bun run server/src/db/migrate.ts",
+    "migrate": "pnpm drizzle-kit generate && bun run server/src/db/migrate.ts"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.2.2",
