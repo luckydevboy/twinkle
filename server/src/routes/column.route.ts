@@ -3,7 +3,6 @@ import { zValidator } from "@hono/zod-validator";
 import { eq } from "drizzle-orm";
 
 import { columns as columnsTable, insertColumnsSchema } from "@/db/schema";
-import { boards as boardsTable } from "@/db/schema";
 import { db } from "@/db";
 import { z } from "zod";
 
