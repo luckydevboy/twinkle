@@ -7,7 +7,7 @@ export default defineConfig({
     "./server/src/db/schema/column.schema.ts",
     "./server/src/db/schema/task.schema.ts",
   ],
-  out: "./drizzle",
+  out: "drizzle",
   dbCredentials: {
     url: process.env.DATABASE_URL!,
   },

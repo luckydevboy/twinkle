@@ -22,6 +22,6 @@ export const columnsRelations = relations(columns, ({ one, many }) => ({
 
 export const insertColumnsSchema = createInsertSchema(columns, {
   name: z.string().min(1).max(20),
-  boardId: z.string().nullable(),
+  boardId: z.string(),
 });
 export const selectColumnsSchema = createSelectSchema(columns);

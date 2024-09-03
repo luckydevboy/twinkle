@@ -3,11 +3,19 @@ import { zValidator } from "@hono/zod-validator";
 import { eq } from "drizzle-orm";
 
 import { columns as columnsTable, insertColumnsSchema } from "@/db/schema";
+import { boards as boardsTable } from "@/db/schema";
 import { db } from "@/db";
+import { z } from "zod";
 
 export const columnRoutes = new Hono()
-  .get("/", async (c) => {
-    const columns = await db.select().from(columnsTable);
+  // Get columns of a specific board
+  .get("board/:boardId{[0-9]+}", async (c) => {
+    const boardId = c.req.param("boardId");
+
+    const columns = await db
+      .select()
+      .from(columnsTable)
+      .where(eq(columnsTable.boardId, boardId));
 
     c.status(200);
     return c.json({
@@ -15,6 +23,7 @@ export const columnRoutes = new Hono()
       data: { columns },
     });
   })
+  // Create new column
   .post("/", zValidator("json", insertColumnsSchema), async (c) => {
     const column = c.req.valid("json");
 
@@ -28,19 +37,7 @@ export const columnRoutes = new Hono()
       },
     });
   })
-  .get(":id{[0-9]+}", async (c) => {
-    const id = c.req.param("id");
-    const column = await db
-      .select()
-      .from(columnsTable)
-      .where(eq(columnsTable.id, Number(id)));
-
-    c.status(200);
-    return c.json({
-      success: true,
-      data: { column },
-    });
-  })
+  // Update a column
   .put("/:id{[0-9]+}", zValidator("json", insertColumnsSchema), async (c) => {
     const id = c.req.param("id");
     const column = c.req.valid("json");
@@ -56,6 +53,7 @@ export const columnRoutes = new Hono()
       data: { column },
     });
   })
+  // delete a column
   .delete(":id{[0-9]+}", async (c) => {
     const id = c.req.param("id");
 
@@ -66,4 +64,24 @@ export const columnRoutes = new Hono()
       success: true,
       data: null,
     });
-  });
+  })
+  // Reorder columns in a board
+  .put(
+    "board/:boardId{[0-9]+}/reorder",
+    zValidator("json", z.object({ columnIds: z.array(z.string()) })),
+    async (c) => {
+      const boardId = c.req.param("boardId");
+      const { columnIds } = await c.req.json();
+
+      const board = await db
+        .select()
+        .from(boardsTable)
+        .where(eq(boardsTable.id, Number(boardId)));
+
+      c.status(201);
+      return c.json({
+        success: true,
+        data: board,
+      });
+    },
+  );
