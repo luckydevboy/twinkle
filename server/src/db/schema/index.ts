@@ -1,3 +1,3 @@
-export * from "./board.schema";
-export * from "./task.schema";
-export * from "./column.schema";
+export * from "./boards.schema";
+export * from "./tasks.schema";
+export * from "./columns.schema";

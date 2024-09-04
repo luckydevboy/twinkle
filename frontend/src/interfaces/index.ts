@@ -1,5 +1,5 @@
 export interface IBoard {
-  id: string;
+  id: number;
   name: string;
   tasks: {
     [key: string]: ITask;
@@ -7,25 +7,23 @@ export interface IBoard {
   columns: {
     [key: string]: IColumn;
   };
-  columnOrder: string[];
+  columnOrder: number[];
 }
 
 export interface IColumn {
-  id: string;
+  id: number;
   title: string;
-  taskIds: string[];
+  taskIds: number[];
 }
 
 export interface ITask {
-  id: string;
+  id: number;
   content: string;
 }
 
 export interface IResponse<T> {
-  status: IStatus;
-  data: {
-    [key: string]: T;
-  };
+  success: IStatus;
+  data: T;
 }
 
-export type IStatus = "success" | "fail";
+export type IStatus = true | "fail";

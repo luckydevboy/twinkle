@@ -1,17 +1,20 @@
 export interface IBoardDto {
-  _id: string;
+  id: number;
   name: string;
   columns: IColumnDto[];
 }
 
 export interface IColumnDto {
-  _id: string;
+  id: number;
   name: string;
+  boardId: number;
+  order: number;
   tasks: ITaskDto[];
 }
 
 export interface ITaskDto {
-  _id: string;
+  id: number;
   name: string;
-  column: string;
+  description: string;
+  columnId: number;
 }

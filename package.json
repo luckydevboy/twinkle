@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "bun run --hot server/src/index.ts",
+    "dev": "bun --watch server/src/index.ts",
     "migration:generate": "pnpm drizzle-kit generate",
     "migration:push": "bun run server/src/db/migrate.ts",
     "migrate": "pnpm drizzle-kit generate && bun run server/src/db/migrate.ts"

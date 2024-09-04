@@ -1,3 +1,5 @@
+"use client";
+
 import { Draggable } from "@hello-pangea/dnd";
 
 import {
@@ -17,7 +19,7 @@ type Props = {
 
 const Task = ({ task, index }: Props) => {
   return (
-    <Draggable draggableId={task.id} index={index}>
+    <Draggable draggableId={`task-${String(task.id)}`} index={index}>
       {(provided) => (
         <Card
           {...provided.draggableProps}

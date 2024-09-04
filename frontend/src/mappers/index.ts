@@ -4,40 +4,24 @@ import { IBoard, IColumn, ITask } from "@/interfaces";
 export const mapBoardFromDto = (board: IBoardDto): IBoard => {
   const tasks: { [key: string]: ITask } = {};
   const columns: { [key: string]: IColumn } = {};
-  const columnOrder: string[] = [];
+  const columnOrder: number[] = [];
 
   board.columns.forEach((column) => {
-    columns[column._id] = { id: column._id, title: column.name, taskIds: [] };
+    columns[column.id] = { id: column.id, title: column.name, taskIds: [] };
 
-    columnOrder.push(column._id);
+    columnOrder.push(column.id);
 
     column.tasks.forEach((task) => {
-      tasks[task._id] = { id: task._id, content: task.name };
-      columns[column._id].taskIds.push(task._id);
+      tasks[task.id] = { id: task.id, content: task.name };
+      columns[column.id].taskIds.push(task.id);
     });
   });
 
   return {
     name: board.name,
-    id: board._id,
+    id: board.id,
     tasks,
     columns,
     columnOrder,
-  };
-};
-
-export const mapBoardToDto = (board: IBoard): IBoardDto => {
-  return {
-    _id: board.id,
-    name: board.name,
-    columns: board.columnOrder.map((colId) => ({
-      _id: colId,
-      name: board.columns[colId].title,
-      tasks: board.columns[colId].taskIds.map((taskId) => ({
-        _id: taskId,
-        name: board.tasks[taskId].content,
-        column: colId,
-      })),
-    })),
   };
 };

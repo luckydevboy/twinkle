@@ -43,7 +43,7 @@ const Board = ({ board }: Props) => {
     if (type === "column") {
       const newColumnOrder = Array.from(state.columnOrder);
       newColumnOrder.splice(source.index, 1);
-      newColumnOrder.splice(destination.index, 0, draggableId);
+      newColumnOrder.splice(destination.index, 0, Number(draggableId));
 
       const newState: IBoard = {
         ...state,
@@ -64,7 +64,7 @@ const Board = ({ board }: Props) => {
     if (startColumn === finishColumn) {
       const newTaskIds = Array.from(startColumn.taskIds);
       newTaskIds.splice(source.index, 1);
-      newTaskIds.splice(destination.index, 0, draggableId);
+      newTaskIds.splice(destination.index, 0, Number(draggableId));
 
       const newColumn: IColumn = {
         ...startColumn,
@@ -98,7 +98,7 @@ const Board = ({ board }: Props) => {
     };
 
     const finishTaskIds = Array.from(finishColumn.taskIds);
-    finishTaskIds.splice(destination.index, 0, draggableId);
+    finishTaskIds.splice(destination.index, 0, Number(draggableId));
     const newFinishColumn: IColumn = {
       ...finishColumn,
       taskIds: finishTaskIds,
@@ -115,7 +115,7 @@ const Board = ({ board }: Props) => {
     setState(newState);
 
     moveTaskToAnotherColumn.mutateAsync({
-      taskId: draggableId,
+      taskId: Number(draggableId),
       newColumnId: newFinishColumn.id,
       position: destination.index,
     });
@@ -126,7 +126,6 @@ const Board = ({ board }: Props) => {
     createColumn
       .mutateAsync({ boardId: board.id, name: newColumnTitle })
       .then((res) => {
-        console.log(res.data);
         setState({
           ...state,
           columns: {
@@ -149,7 +148,7 @@ const Board = ({ board }: Props) => {
   };
 
   return (
-    <div className="flex p-12 gap-x-10 overflow-x-auto h-svh">
+    <div className="flex p-4 gap-x-10 overflow-x-auto h-svh">
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
           droppableId="all-columns"
@@ -165,7 +164,7 @@ const Board = ({ board }: Props) => {
               {state.columnOrder.map((columnId, index) => {
                 const column = state.columns[columnId];
                 const tasks = column.taskIds.map(
-                  (taskId) => state.tasks[taskId]
+                  (taskId) => state.tasks[taskId],
                 );
 
                 return (

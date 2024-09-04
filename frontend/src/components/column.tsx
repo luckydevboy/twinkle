@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from "react";
 import { EllipsisHorizontalIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
@@ -38,7 +40,7 @@ const Column = ({ column, tasks, index }: Props) => {
   };
 
   return (
-    <Draggable draggableId={column.id} index={index}>
+    <Draggable draggableId={String(column.id)} index={index}>
       {(provided) => (
         <Card
           {...provided.draggableProps}
@@ -56,7 +58,7 @@ const Column = ({ column, tasks, index }: Props) => {
               <EllipsisHorizontalIcon className="w-6 h-6 text-zinc-400" />
             </CardTitle>
           </CardHeader>
-          <Droppable droppableId={column.id} type="task">
+          <Droppable droppableId={`column-${String(column.id)}`} type="task">
             {(provided) => (
               <CardContent
                 className="space-y-4 h-full"

@@ -2,7 +2,12 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { eq } from "drizzle-orm";
 
-import { boards as boardsTable, insertBoardsSchema } from "@/db/schema";
+import {
+  boards as boardsTable,
+  insertBoardsSchema,
+  columns as columnsTable,
+  tasks as tasksTable,
+} from "@/db/schema";
 import { db } from "@/db";
 
 export const boardRoutes = new Hono()
@@ -36,12 +41,34 @@ export const boardRoutes = new Hono()
     const board = await db
       .select()
       .from(boardsTable)
-      .where(eq(boardsTable.id, Number(id)));
+      .where(eq(boardsTable.id, Number(id)))
+      .limit(1);
+
+    // Fetch the columns related to the board
+    const columns = await db
+      .select()
+      .from(columnsTable)
+      .where(eq(columnsTable.boardId, Number(id)));
+
+    // Fetch the tasks related to each column
+    const columnsWithTasks = await Promise.all(
+      columns.map(async (column) => {
+        const tasks = await db
+          .select()
+          .from(tasksTable)
+          .where(eq(tasksTable.columnId, column.id));
+
+        return {
+          ...column,
+          tasks,
+        };
+      }),
+    );
 
     c.status(200);
     return c.json({
       success: true,
-      data: { board },
+      data: { id: board[0].id, name: board[0].name, columns: columnsWithTasks },
     });
   })
   // Update board by ID

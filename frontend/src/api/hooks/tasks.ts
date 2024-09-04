@@ -8,24 +8,18 @@ import {
 
 export const useCreateTask = () => {
   return useMutation({
-    mutationFn: (data: { name: string; columnId: string }) =>
-      createTask(data.name, data.columnId),
+    mutationFn: createTask,
   });
 };
 
 export const useReorderTasksInColumn = () => {
   return useMutation({
-    mutationFn: (data: { columnId: string; taskIds: string[] }) =>
-      reorderTasksInColumn(data.columnId, data.taskIds),
+    mutationFn: reorderTasksInColumn,
   });
 };
 
 export const useMoveTaskToAnotherColumn = () => {
   return useMutation({
-    mutationFn: (data: {
-      taskId: string;
-      newColumnId: string;
-      position: number;
-    }) => moveTaskToAnotherColumn(data.taskId, data.newColumnId, data.position),
+    mutationFn: moveTaskToAnotherColumn,
   });
 };
