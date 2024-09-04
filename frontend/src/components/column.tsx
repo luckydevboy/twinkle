@@ -16,6 +16,7 @@ import {
 } from "@/components";
 import { IColumn, ITask } from "@/interfaces";
 import { useCreateTask } from "@/api";
+import { ScrollArea } from "./ui/scroll-area";
 
 type Props = {
   column: IColumn;
@@ -55,7 +56,7 @@ const Column = ({ column, tasks, index }: Props) => {
         <Card
           {...provided.draggableProps}
           ref={provided.innerRef}
-          className="w-80 flex-shrink-0 h-fit"
+          className="w-96 flex-shrink-0 h-[calc(100vh-68px-16px-16px)]"
         >
           <CardHeader {...provided.dragHandleProps}>
             <CardTitle className="flex items-center justify-between">
@@ -70,42 +71,44 @@ const Column = ({ column, tasks, index }: Props) => {
           </CardHeader>
           <Droppable droppableId={`column-${String(column.id)}`} type="task">
             {(provided) => (
-              <CardContent
-                className="space-y-4 h-full"
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-              >
-                {tasks.map((task, index) => (
-                  <Task key={task.id} task={task} index={index} />
-                ))}
-                {provided.placeholder}
-                {isAddingNewTask ? (
-                  <form onSubmit={handleAddNewTask}>
-                    <Input
-                      value={newTaskTitle}
-                      onChange={({ target }) => setNewTaskTitle(target.value)}
-                      placeholder="Enter yout task here..."
-                    />
-                    <div className="flex items-center gap-x-3">
-                      <Button disabled={!newTaskTitle} type="submit">
-                        Add task
-                      </Button>
-                      <XMarkIcon
-                        className="w-5 h-5 text-zinc-500 cursor-pointer"
-                        onClick={handleClose}
+              <ScrollArea className="h-[calc(100%-72px)]">
+                <CardContent
+                  className="space-y-4"
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  {tasks.map((task, index) => (
+                    <Task key={task.id} task={task} index={index} />
+                  ))}
+                  {provided.placeholder}
+                  {isAddingNewTask ? (
+                    <form onSubmit={handleAddNewTask}>
+                      <Input
+                        value={newTaskTitle}
+                        onChange={({ target }) => setNewTaskTitle(target.value)}
+                        placeholder="Enter yout task here..."
                       />
-                    </div>
-                  </form>
-                ) : (
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    onClick={() => setIsAddingNewTask(true)}
-                  >
-                    Add new task
-                  </Button>
-                )}
-              </CardContent>
+                      <div className="flex items-center gap-x-3">
+                        <Button disabled={!newTaskTitle} type="submit">
+                          Add task
+                        </Button>
+                        <XMarkIcon
+                          className="w-5 h-5 text-zinc-500 cursor-pointer"
+                          onClick={handleClose}
+                        />
+                      </div>
+                    </form>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => setIsAddingNewTask(true)}
+                    >
+                      Add new task
+                    </Button>
+                  )}
+                </CardContent>
+              </ScrollArea>
             )}
           </Droppable>
         </Card>

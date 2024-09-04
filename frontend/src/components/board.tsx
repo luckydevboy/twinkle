@@ -152,7 +152,7 @@ const Board = ({ board }: Props) => {
   };
 
   return (
-    <div className="flex p-4 gap-x-10 overflow-x-auto h-svh">
+    <div className="flex p-4 gap-x-10 overflow-x-auto">
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
           droppableId="all-columns"
@@ -186,7 +186,7 @@ const Board = ({ board }: Props) => {
         </Droppable>
       </DragDropContext>
       {isAddingNewColumn ? (
-        <Card className="w-80 h-fit flex-shrink-0">
+        <Card className="w-96 h-fit flex-shrink-0">
           <CardHeader>
             <form className="space-y-3" onSubmit={handleAddNewColumn}>
               <Input
@@ -210,7 +210,7 @@ const Board = ({ board }: Props) => {
       ) : (
         <Button
           variant="outline"
-          className="w-64 justify-start flex-shrink-0"
+          className="w-96 justify-start flex-shrink-0"
           onClick={() => setIsAddingNewColumn(true)}
         >
           Add new column
