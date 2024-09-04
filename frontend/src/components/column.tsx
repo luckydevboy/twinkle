@@ -1,6 +1,7 @@
-"use client"
+"use client";
 
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { EllipsisHorizontalIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 
@@ -26,12 +27,19 @@ const Column = ({ column, tasks, index }: Props) => {
   const [isAddingNewTask, setIsAddingNewTask] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const createTask = useCreateTask();
-
+  const queryClient = useQueryClient();
+  
   const handleAddNewTask = () => {
-    createTask.mutateAsync({
-      columnId: column.id,
-      name: newTaskTitle,
-    });
+    createTask
+      .mutateAsync({
+        columnId: column.id,
+        name: newTaskTitle,
+      })
+      .then(() => {
+        handleClose();
+        // TODO: make id to be dynamic
+        queryClient.invalidateQueries({ queryKey: ["boards", 1] });
+      });
   };
 
   const handleClose = () => {

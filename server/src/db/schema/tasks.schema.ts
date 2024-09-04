@@ -20,7 +20,7 @@ export const tasksRelations = relations(tasks, ({ one }) => ({
 }));
 
 export const insertTasksSchema = createInsertSchema(tasks, {
-  name: z.string().min(1).max(20),
+  name: z.string().min(1).max(100),
   description: z.string().min(1).max(1000),
   columnId: z.number().int(),
 });

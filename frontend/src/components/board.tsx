@@ -1,6 +1,6 @@
 "use client";
 
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
@@ -25,6 +25,10 @@ const Board = ({ board }: Props) => {
   const reorderTasksInColumns = useReorderTasksInColumn();
   const moveTaskToAnotherColumn = useMoveTaskToAnotherColumn();
   const createColumn = useCreateColumn();
+
+  useEffect(() => {
+    setState(board);
+  }, [board]);
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId, type } = result;

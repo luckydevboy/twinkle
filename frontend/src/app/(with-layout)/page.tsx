@@ -4,6 +4,7 @@ import { useGetBoard } from "@/api";
 import { Board } from "@/components";
 
 const Home = () => {
+  // TODO: make id to be dynamic
   const { data, isPending, isError, error } = useGetBoard(1);
 
   if (isPending) {
