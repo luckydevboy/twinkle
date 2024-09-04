@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { EllipsisHorizontalIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
@@ -28,8 +28,10 @@ const Column = ({ column, tasks, index }: Props) => {
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const createTask = useCreateTask();
   const queryClient = useQueryClient();
-  
-  const handleAddNewTask = () => {
+
+  const handleAddNewTask = (e: SyntheticEvent) => {
+    e.preventDefault();
+
     createTask
       .mutateAsync({
         columnId: column.id,
@@ -78,17 +80,14 @@ const Column = ({ column, tasks, index }: Props) => {
                 ))}
                 {provided.placeholder}
                 {isAddingNewTask ? (
-                  <>
+                  <form onSubmit={handleAddNewTask}>
                     <Input
                       value={newTaskTitle}
                       onChange={({ target }) => setNewTaskTitle(target.value)}
                       placeholder="Enter yout task here..."
                     />
                     <div className="flex items-center gap-x-3">
-                      <Button
-                        disabled={!newTaskTitle}
-                        onClick={handleAddNewTask}
-                      >
+                      <Button disabled={!newTaskTitle} type="submit">
                         Add task
                       </Button>
                       <XMarkIcon
@@ -96,7 +95,7 @@ const Column = ({ column, tasks, index }: Props) => {
                         onClick={handleClose}
                       />
                     </div>
-                  </>
+                  </form>
                 ) : (
                   <Button
                     variant="outline"
