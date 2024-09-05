@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "server": "workspace:*",
     "@hello-pangea/dnd": "^16.6.0",
     "@heroicons/react": "^2.1.5",
     "@radix-ui/react-avatar": "^1.1.0",

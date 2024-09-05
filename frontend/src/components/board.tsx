@@ -32,13 +32,15 @@ const Board = ({ board }: Props) => {
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId, type } = result;
+    const sourceDroppableId = source.droppableId.split("-")[1];
+    const destinationDroppableId = destination?.droppableId.split("-")[1];
 
     if (!destination) {
       return;
     }
 
     if (
-      destination.droppableId === source.droppableId &&
+      destination.droppableId === sourceDroppableId &&
       destination.index === source.index
     ) {
       return;
@@ -62,7 +64,7 @@ const Board = ({ board }: Props) => {
       });
     }
 
-    const startColumn = state.columns[source.droppableId];
+    const startColumn = state.columns[sourceDroppableId];
     const finishColumn = state.columns[destination.droppableId];
 
     if (startColumn === finishColumn) {
@@ -210,7 +212,7 @@ const Board = ({ board }: Props) => {
       ) : (
         <Button
           variant="outline"
-          className="w-96 justify-start flex-shrink-0"
+          className="w-64 justify-start flex-shrink-0"
           onClick={() => setIsAddingNewColumn(true)}
         >
           Add new column

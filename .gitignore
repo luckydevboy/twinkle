@@ -37,6 +37,10 @@ frontend/*.tsbuildinfo
 frontend/next-env.d.ts
 
 # server
-node_modules
-.env*
+server/node_modules
+server/.env*
+
+# Docker generated files
 data
+
+node_modules

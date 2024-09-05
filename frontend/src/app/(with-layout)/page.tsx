@@ -2,6 +2,7 @@
 
 import { useGetBoard } from "@/api";
 import { Board } from "@/components";
+import { ApiRoutes } from "server/app";
 
 const Home = () => {
   // TODO: make id to be dynamic

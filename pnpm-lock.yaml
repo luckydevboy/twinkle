@@ -7,38 +7,10 @@ settings:
 importers:
 
   .:
-    dependencies:
-      '@hono/zod-validator':
-        specifier: ^0.2.2
-        version: 0.2.2(hono@4.5.9)(zod@3.23.8)
-      drizzle-orm:
-        specifier: ^0.33.0
-        version: 0.33.0(@types/react@18.3.4)(bun-types@1.1.26)(postgres@3.4.4)(react@18.3.1)
-      drizzle-zod:
-        specifier: ^0.5.1
-        version: 0.5.1(drizzle-orm@0.33.0(@types/react@18.3.4)(bun-types@1.1.26)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8)
-      hono:
-        specifier: ^4.5.9
-        version: 4.5.9
-      postgres:
-        specifier: ^3.4.4
-        version: 3.4.4
-      zod:
-        specifier: ^3.23.8
-        version: 3.23.8
     devDependencies:
-      '@types/bun':
-        specifier: latest
-        version: 1.1.8
-      drizzle-kit:
-        specifier: ^0.24.2
-        version: 0.24.2
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
-      tsx:
-        specifier: ^4.19.0
-        version: 4.19.0
 
   frontend:
     dependencies:
@@ -87,6 +59,9 @@ importers:
       react-dom:
         specifier: ^18
         version: 18.3.1(react@18.3.1)
+      server:
+        specifier: workspace:*
+        version: link:../server
       tailwind-merge:
         specifier: ^2.5.2
         version: 2.5.2
@@ -121,6 +96,37 @@ importers:
       typescript:
         specifier: ^5
         version: 5.5.4
+
+  server:
+    dependencies:
+      '@hono/zod-validator':
+        specifier: ^0.2.2
+        version: 0.2.2(hono@4.5.9)(zod@3.23.8)
+      drizzle-orm:
+        specifier: ^0.33.0
+        version: 0.33.0(@types/react@18.3.4)(bun-types@1.1.26)(postgres@3.4.4)(react@18.3.1)
+      drizzle-zod:
+        specifier: ^0.5.1
+        version: 0.5.1(drizzle-orm@0.33.0(@types/react@18.3.4)(bun-types@1.1.26)(postgres@3.4.4)(react@18.3.1))(zod@3.23.8)
+      hono:
+        specifier: ^4.5.9
+        version: 4.5.9
+      postgres:
+        specifier: ^3.4.4
+        version: 3.4.4
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
+    devDependencies:
+      '@types/bun':
+        specifier: ^1.1.8
+        version: 1.1.8
+      drizzle-kit:
+        specifier: ^0.24.2
+        version: 0.24.2
+      tsx:
+        specifier: ^4.19.0
+        version: 4.19.0
 
 packages:
 

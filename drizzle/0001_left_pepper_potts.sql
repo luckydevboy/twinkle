@@ -1,1 +1,0 @@
-ALTER TABLE "columns" ADD COLUMN "order" integer NOT NULL;
