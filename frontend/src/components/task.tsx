@@ -32,10 +32,10 @@ const Task = ({ task, index }: Props) => {
                 {task.content}
               </h3>
               <div className="flex flex-wrap gap-1">
-                <Badge variant="secondary" className="text-xs p-1">
+                <Badge variant="secondary" className="text-xs">
                   Frontend
                 </Badge>
-                <Badge variant="outline" className="text-xs p-1">
+                <Badge variant="outline" className="text-xs">
                   High Priority
                 </Badge>
               </div>
