@@ -56,7 +56,7 @@ const Column = ({ column, tasks, index }: Props) => {
         <Card
           {...provided.draggableProps}
           ref={provided.innerRef}
-          className="w-96 flex-shrink-0 h-[calc(100vh-68px-16px-16px)]"
+          className="w-96 flex-shrink-0 max-h-[calc(100vh-68px-16px-16px)]"
         >
           <CardHeader {...provided.dragHandleProps}>
             <CardTitle className="flex items-center justify-between">
@@ -82,13 +82,13 @@ const Column = ({ column, tasks, index }: Props) => {
                   ))}
                   {provided.placeholder}
                   {isAddingNewTask ? (
-                    <form onSubmit={handleAddNewTask}>
+                    <form onSubmit={handleAddNewTask} className="mt-1">
                       <Input
                         value={newTaskTitle}
                         onChange={({ target }) => setNewTaskTitle(target.value)}
                         placeholder="Enter yout task here..."
                       />
-                      <div className="flex items-center gap-x-3">
+                      <div className="flex items-center gap-x-3 mt-3">
                         <Button disabled={!newTaskTitle} type="submit">
                           Add task
                         </Button>

@@ -40,7 +40,7 @@ const Board = ({ board }: Props) => {
     }
 
     if (
-      destination.droppableId === sourceDroppableId &&
+      destinationDroppableId === sourceDroppableId &&
       destination.index === source.index
     ) {
       return;
@@ -64,67 +64,69 @@ const Board = ({ board }: Props) => {
       });
     }
 
-    const startColumn = state.columns[sourceDroppableId];
-    const finishColumn = state.columns[destination.droppableId];
+    if (destinationDroppableId) {
+      const startColumn = state.columns[sourceDroppableId];
+      const finishColumn = state.columns[destinationDroppableId];
 
-    if (startColumn === finishColumn) {
-      const newTaskIds = Array.from(startColumn.taskIds);
-      newTaskIds.splice(source.index, 1);
-      newTaskIds.splice(destination.index, 0, Number(draggableId));
+      if (startColumn === finishColumn) {
+        const newTaskIds = Array.from(startColumn.taskIds);
+        newTaskIds.splice(source.index, 1);
+        newTaskIds.splice(destination.index, 0, Number(draggableId));
 
-      const newColumn: IColumn = {
+        const newColumn: IColumn = {
+          ...startColumn,
+          taskIds: newTaskIds,
+        };
+
+        const newState: IBoard = {
+          ...state,
+          columns: {
+            ...state.columns,
+            [newColumn.id]: newColumn,
+          },
+        };
+
+        setState(newState);
+
+        reorderTasksInColumns.mutateAsync({
+          columnId: startColumn.id,
+          taskIds: newTaskIds,
+        });
+
+        return;
+      }
+
+      // Moving from one list to another
+      const startTasksIds = Array.from(startColumn.taskIds);
+      startTasksIds.splice(source.index, 1);
+      const newStartColumn: IColumn = {
         ...startColumn,
-        taskIds: newTaskIds,
+        taskIds: startTasksIds,
+      };
+
+      const finishTaskIds = Array.from(finishColumn.taskIds);
+      finishTaskIds.splice(destination.index, 0, Number(draggableId));
+      const newFinishColumn: IColumn = {
+        ...finishColumn,
+        taskIds: finishTaskIds,
       };
 
       const newState: IBoard = {
         ...state,
         columns: {
           ...state.columns,
-          [newColumn.id]: newColumn,
+          [newStartColumn.id]: newStartColumn,
+          [newFinishColumn.id]: newFinishColumn,
         },
       };
-
       setState(newState);
 
-      reorderTasksInColumns.mutateAsync({
-        columnId: startColumn.id,
-        taskIds: newTaskIds,
+      moveTaskToAnotherColumn.mutateAsync({
+        taskId: Number(draggableId),
+        newColumnId: newFinishColumn.id,
+        position: destination.index,
       });
-
-      return;
     }
-
-    // Moving from one list to another
-    const startTasksIds = Array.from(startColumn.taskIds);
-    startTasksIds.splice(source.index, 1);
-    const newStartColumn: IColumn = {
-      ...startColumn,
-      taskIds: startTasksIds,
-    };
-
-    const finishTaskIds = Array.from(finishColumn.taskIds);
-    finishTaskIds.splice(destination.index, 0, Number(draggableId));
-    const newFinishColumn: IColumn = {
-      ...finishColumn,
-      taskIds: finishTaskIds,
-    };
-
-    const newState: IBoard = {
-      ...state,
-      columns: {
-        ...state.columns,
-        [newStartColumn.id]: newStartColumn,
-        [newFinishColumn.id]: newFinishColumn,
-      },
-    };
-    setState(newState);
-
-    moveTaskToAnotherColumn.mutateAsync({
-      taskId: Number(draggableId),
-      newColumnId: newFinishColumn.id,
-      position: destination.index,
-    });
   };
 
   const handleAddNewColumn = (e: SyntheticEvent) => {
@@ -212,7 +214,7 @@ const Board = ({ board }: Props) => {
       ) : (
         <Button
           variant="outline"
-          className="w-64 justify-start flex-shrink-0"
+          className="flex-shrink-0"
           onClick={() => setIsAddingNewColumn(true)}
         >
           Add new column
