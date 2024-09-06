@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "exports": {
-    "./app": "./src/app.ts"
-  },
   "scripts": {
     "dev": "bun --watch src/index.ts",
     "migration:generate": "pnpm drizzle-kit generate",
