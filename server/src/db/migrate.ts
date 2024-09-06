@@ -10,6 +10,7 @@ const migration = async () => {
   await migrate(drizzle(migrationClient), { migrationsFolder: "./drizzle" });
 
   console.log("migration complete");
+  process.exit(0);
 };
 
 migration();

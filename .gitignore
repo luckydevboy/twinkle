@@ -41,6 +41,6 @@ server/node_modules
 server/.env*
 
 # Docker generated files
-data
+postgres
 
 node_modules
