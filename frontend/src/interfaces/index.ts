@@ -26,4 +26,4 @@ export interface IResponse<T> {
   data: T;
 }
 
-export type IStatus = true | "fail";
+export type IStatus = boolean;

@@ -1,32 +1,32 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { eq } from "drizzle-orm";
-
-import { columns as columnsTable, insertColumnsSchema } from "@/db/schema";
-import { db } from "@/db";
 import { z } from "zod";
 
+import { column as columnTable, insertColumnSchema } from "@/db/schema";
+import { db } from "@/db";
+
 export const columnRoutes = new Hono()
-  // Get columns of a specific board
+  // Get column of a specific board
   .get("board/:boardId{[0-9]+}", async (c) => {
     const boardId = c.req.param("boardId");
 
-    const columns = await db
+    const column = await db
       .select()
-      .from(columnsTable)
-      .where(eq(columnsTable.boardId, boardId));
+      .from(columnTable)
+      .where(eq(columnTable.boardId, Number(boardId)));
 
     c.status(200);
     return c.json({
       success: true,
-      data: { columns },
+      data: { column },
     });
   })
   // Create new column
-  .post("/", zValidator("json", insertColumnsSchema), async (c) => {
+  .post("/", zValidator("json", insertColumnSchema), async (c) => {
     const column = c.req.valid("json");
 
-    const result = await db.insert(columnsTable).values(column).returning();
+    const result = await db.insert(columnTable).values(column).returning();
 
     c.status(201);
     return c.json({
@@ -37,14 +37,14 @@ export const columnRoutes = new Hono()
     });
   })
   // Update a column
-  .put("/:id{[0-9]+}", zValidator("json", insertColumnsSchema), async (c) => {
+  .put("/:id{[0-9]+}", zValidator("json", insertColumnSchema), async (c) => {
     const id = c.req.param("id");
     const column = c.req.valid("json");
 
     await db
-      .update(columnsTable)
+      .update(columnTable)
       .set(column)
-      .where(eq(columnsTable.id, Number(id)));
+      .where(eq(columnTable.id, Number(id)));
 
     c.status(201);
     return c.json({
@@ -56,7 +56,7 @@ export const columnRoutes = new Hono()
   .delete(":id{[0-9]+}", async (c) => {
     const id = c.req.param("id");
 
-    await db.delete(columnsTable).where(eq(columnsTable.id, Number(id)));
+    await db.delete(columnTable).where(eq(columnTable.id, Number(id)));
 
     c.status(204);
     return c.json({
@@ -64,7 +64,7 @@ export const columnRoutes = new Hono()
       data: null,
     });
   })
-  // Reorder columns in a board
+  // Reorder column in a board
   .put(
     "board/:boardId{[0-9]+}/reorder",
     zValidator("json", z.object({ columnIds: z.array(z.number()) })),
@@ -72,12 +72,12 @@ export const columnRoutes = new Hono()
       const boardId = c.req.param("boardId");
       const { columnIds } = await c.req.valid("json");
 
-      const columns = await db
+      const column = await db
         .select()
-        .from(columnsTable)
-        .where(eq(columnsTable.boardId, Number(boardId)));
+        .from(columnTable)
+        .where(eq(columnTable.boardId, Number(boardId)));
 
-      const validColumnIds = columns.map((column) => column.id);
+      const validColumnIds = column.map((column) => column.id);
       const isValid = columnIds.every((id) => validColumnIds.includes(id));
 
       if (!isValid) {
@@ -91,16 +91,16 @@ export const columnRoutes = new Hono()
       await Promise.all(
         columnIds.map((columnId, index) =>
           db
-            .update(columnsTable)
+            .update(columnTable)
             .set({ order: index + 1 })
-            .where(eq(columnsTable.id, Number(columnId))),
+            .where(eq(columnTable.id, Number(columnId))),
         ),
       );
 
       c.status(201);
       return c.json({
         success: true,
-        message: "Columns reordered successfully.",
+        message: "Column reordered successfully.",
       });
     },
   );

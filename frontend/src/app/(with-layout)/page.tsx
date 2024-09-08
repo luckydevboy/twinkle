@@ -2,18 +2,17 @@
 
 import { useGetBoard } from "@/api";
 import { Board } from "@/components";
-import { ApiRoutes } from "server/app";
 
 const Home = () => {
   // TODO: make id to be dynamic
   const { data, isPending, isError, error } = useGetBoard(1);
 
   if (isPending) {
-    return <span>Loading...</span>;
+    return <div className="p-4">Loading...</div>;
   }
 
   if (isError) {
-    return <span>Error: {error.message}</span>;
+    return <div className="p-4">Error: {error.message}</div>;
   }
 
   return <Board board={data} />;

@@ -3,10 +3,10 @@ import { zValidator } from "@hono/zod-validator";
 import { eq } from "drizzle-orm";
 
 import {
-  boards as boardsTable,
-  insertBoardsSchema,
-  columns as columnsTable,
-  tasks as tasksTable,
+  board as boardsTable,
+  insertBoardSchema,
+  column as columnsTable,
+  task as tasksTable,
 } from "@/db/schema";
 import { db } from "@/db";
 
@@ -22,7 +22,7 @@ export const boardRoutes = new Hono()
     });
   })
   // Create board
-  .post("/", zValidator("json", insertBoardsSchema), async (c) => {
+  .post("/", zValidator("json", insertBoardSchema), async (c) => {
     const board = c.req.valid("json");
 
     const result = await db.insert(boardsTable).values(board).returning();
@@ -43,6 +43,14 @@ export const boardRoutes = new Hono()
       .from(boardsTable)
       .where(eq(boardsTable.id, Number(id)))
       .limit(1);
+
+    if (!board.length) {
+      c.status(404);
+      return c.json({
+        success: false,
+        message: "Board not found!",
+      });
+    }
 
     // Fetch the columns related to the board
     const columns = await db
@@ -72,7 +80,7 @@ export const boardRoutes = new Hono()
     });
   })
   // Update board by ID
-  .put("/:id{[0-9]+}", zValidator("json", insertBoardsSchema), async (c) => {
+  .put("/:id{[0-9]+}", zValidator("json", insertBoardSchema), async (c) => {
     const id = c.req.param("id");
     const board = c.req.valid("json");
 

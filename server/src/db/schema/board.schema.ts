@@ -3,18 +3,18 @@ import { relations } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
-import { columns } from "./columns.schema";
+import { column } from "./column.schema";
 
-export const boards = pgTable("boards", {
+export const board = pgTable("board", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
 });
 
-export const boardsRelations = relations(boards, ({ many }) => ({
-  columns: many(columns),
+export const boardRelations = relations(board, ({ many }) => ({
+  columns: many(column),
 }));
 
-export const insertBoardsSchema = createInsertSchema(boards, {
+export const insertBoardSchema = createInsertSchema(board, {
   name: z.string().min(1).max(20),
 });
-export const selectBoardsSchema = createSelectSchema(boards);
+export const selectBoardSchema = createSelectSchema(board);

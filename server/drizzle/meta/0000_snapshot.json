@@ -1,11 +1,11 @@
 {
-  "id": "9a83f8ba-94eb-433c-beba-26f956b1b93b",
+  "id": "1b027bbb-d80a-4528-a214-21ef08208835",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.boards": {
-      "name": "boards",
+    "public.board": {
+      "name": "board",
       "schema": "",
       "columns": {
         "id": {
@@ -26,8 +26,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.columns": {
-      "name": "columns",
+    "public.column": {
+      "name": "column",
       "schema": "",
       "columns": {
         "id": {
@@ -60,8 +60,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "public.tasks": {
-      "name": "tasks",
+    "public.task": {
+      "name": "task",
       "schema": "",
       "columns": {
         "id": {
@@ -84,6 +84,12 @@
         },
         "column_id": {
           "name": "column_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
