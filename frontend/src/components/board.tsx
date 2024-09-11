@@ -132,19 +132,23 @@ const Board = ({ board }: Props) => {
   const handleAddNewColumn = (e: SyntheticEvent) => {
     e.preventDefault();
     createColumn
-      .mutateAsync({ boardId: board.id, name: newColumnTitle })
+      .mutateAsync({
+        boardId: board.id,
+        name: newColumnTitle,
+        order: board.columnOrder.length + 1,
+      })
       .then((res) => {
         setState({
           ...state,
           columns: {
             ...state.columns,
-            [res.data._id]: {
+            [res.data.id]: {
               taskIds: [],
-              id: res.data._id,
+              id: res.data.id,
               title: res.data.name,
             },
           },
-          columnOrder: [...state.columnOrder, res.data._id],
+          columnOrder: [...state.columnOrder, res.data.id],
         });
         handleClose();
       });

@@ -1,11 +1,17 @@
 import ky from "ky";
 
-export const createColumn = (data: { name: string; boardId: number }) => {
-  const { name, boardId } = data;
+import { IColumnDto, IResponseDto } from "@/dto";
 
-  return ky.post("api/v1/columns", {
-    json: { name, boardId },
-  });
+export const createColumn = (data: {
+  name: string;
+  boardId: number;
+  order: number;
+}) => {
+  return ky
+    .post<IResponseDto<Omit<IColumnDto, "tasks">>>("api/v1/columns", {
+      json: data,
+    })
+    .json();
 };
 
 export const reorderColumns = (data: {

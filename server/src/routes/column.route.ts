@@ -31,9 +31,7 @@ export const columnRoutes = new Hono()
     c.status(201);
     return c.json({
       success: true,
-      data: {
-        column: result,
-      },
+      data: result[0],
     });
   })
   // Update a column

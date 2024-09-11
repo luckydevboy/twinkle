@@ -18,3 +18,8 @@ export interface ITaskDto {
   description: string;
   columnId: number;
 }
+
+export interface IResponseDto<T> {
+  success: boolean;
+  data: T;
+}
