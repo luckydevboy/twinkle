@@ -1,6 +1,10 @@
 import ky from "ky";
 
-export const createTask = (data: { name: string; columnId: number }) => {
+export const createTask = (data: {
+  name: string;
+  columnId: number;
+  order: number;
+}) => {
   return ky.post("api/v1/tasks", { json: data });
 };
 

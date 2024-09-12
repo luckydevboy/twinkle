@@ -37,6 +37,7 @@ const Column = ({ column, tasks, index }: Props) => {
       .mutateAsync({
         columnId: column.id,
         name: newTaskTitle,
+        order: tasks.length + 1,
       })
       .then(() => {
         handleClose();
