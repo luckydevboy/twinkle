@@ -62,6 +62,7 @@ const Board = ({ board }: Props) => {
         boardId: state.id,
         columnIds: newState.columnOrder,
       });
+      return;
     }
 
     if (destinationDroppableId) {

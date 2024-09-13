@@ -17,6 +17,7 @@ export interface ITaskDto {
   name: string;
   description: string;
   columnId: number;
+  order: number;
 }
 
 export interface IResponseDto<T> {

@@ -68,7 +68,7 @@ export const columnRoutes = new Hono()
     zValidator("json", z.object({ columnIds: z.array(z.number()) })),
     async (c) => {
       const boardId = c.req.param("boardId");
-      const { columnIds } = await c.req.valid("json");
+      const { columnIds } = c.req.valid("json");
 
       const column = await db
         .select()

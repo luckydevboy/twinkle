@@ -9,7 +9,7 @@ export const mapBoardFromDto = (board: IBoardDto): IBoard => {
   board.columns.forEach((column) => {
     columns[column.id] = { id: column.id, title: column.name, taskIds: [] };
 
-    columnOrder.push(column.id);
+    columnOrder[column.order - 1] = column.id;
 
     column.tasks.forEach((task) => {
       tasks[task.id] = { id: task.id, content: task.name };
