@@ -72,44 +72,42 @@ const Column = ({ column, tasks, index }: Props) => {
           </CardHeader>
           <Droppable droppableId={`column-${String(column.id)}`} type="task">
             {(provided) => (
-              <ScrollArea className="h-[calc(100%-72px)]">
-                <CardContent
-                  className="space-y-4"
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                >
-                  {tasks.map((task, index) => (
-                    <Task key={task.id} task={task} index={index} />
-                  ))}
-                  {provided.placeholder}
-                  {isAddingNewTask ? (
-                    <form onSubmit={handleAddNewTask} className="mt-1">
-                      <Input
-                        value={newTaskTitle}
-                        onChange={({ target }) => setNewTaskTitle(target.value)}
-                        placeholder="Enter yout task here..."
+              <CardContent
+                className="space-y-4"
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {tasks.map((task, index) => (
+                  <Task key={task.id} task={task} index={index} />
+                ))}
+                {provided.placeholder}
+                {isAddingNewTask ? (
+                  <form onSubmit={handleAddNewTask} className="mt-1">
+                    <Input
+                      value={newTaskTitle}
+                      onChange={({ target }) => setNewTaskTitle(target.value)}
+                      placeholder="Enter yout task here..."
+                    />
+                    <div className="flex items-center gap-x-3 mt-3">
+                      <Button disabled={!newTaskTitle} type="submit">
+                        Add task
+                      </Button>
+                      <XMarkIcon
+                        className="w-5 h-5 text-zinc-500 cursor-pointer"
+                        onClick={handleClose}
                       />
-                      <div className="flex items-center gap-x-3 mt-3">
-                        <Button disabled={!newTaskTitle} type="submit">
-                          Add task
-                        </Button>
-                        <XMarkIcon
-                          className="w-5 h-5 text-zinc-500 cursor-pointer"
-                          onClick={handleClose}
-                        />
-                      </div>
-                    </form>
-                  ) : (
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                      onClick={() => setIsAddingNewTask(true)}
-                    >
-                      Add new task
-                    </Button>
-                  )}
-                </CardContent>
-              </ScrollArea>
+                    </div>
+                  </form>
+                ) : (
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => setIsAddingNewTask(true)}
+                  >
+                    Add new task
+                  </Button>
+                )}
+              </CardContent>
             )}
           </Droppable>
         </Card>

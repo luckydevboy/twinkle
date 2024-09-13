@@ -1,3 +1,3 @@
-export { boardRoutes } from "./board.route";
-export { columnRoutes } from "./column.route";
-export { taskRoutes } from "./task.route";
+export { boardRoutes } from "./boards.route";
+export { columnRoutes } from "./columns.route";
+export { taskRoutes } from "./tasks.route";
