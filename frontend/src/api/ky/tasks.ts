@@ -11,13 +11,10 @@ export const createTask = (data: {
 export const moveTaskToAnotherColumn = async (data: {
   taskId: number;
   newColumnId: number;
-  position: number;
 }) => {
-  const { taskId, newColumnId, position } = data;
+  const { taskId, newColumnId } = data;
 
-  return ky.put(`api/v1/tasks/${taskId}/move`, {
-    json: { newColumnId, position },
-  });
+  return ky.put(`api/v1/tasks/move/${taskId}/to/${newColumnId}`);
 };
 
 export const reorderTasksInColumn = async (data: {

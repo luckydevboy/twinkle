@@ -105,8 +105,10 @@ const Board = ({ board }: Props) => {
         taskIds: startTasksIds,
       };
 
+      const _draggableId = Number(draggableId.split("-")[1]);
+
       const finishTaskIds = Array.from(finishColumn.taskIds);
-      finishTaskIds.splice(destination.index, 0, Number(draggableId));
+      finishTaskIds.splice(destination.index, 0, _draggableId);
       const newFinishColumn: IColumn = {
         ...finishColumn,
         taskIds: finishTaskIds,
@@ -123,7 +125,7 @@ const Board = ({ board }: Props) => {
       setState(newState);
 
       moveTaskToAnotherColumn.mutateAsync({
-        taskId: Number(draggableId),
+        taskId: _draggableId,
         newColumnId: newFinishColumn.id,
         position: destination.index,
       });

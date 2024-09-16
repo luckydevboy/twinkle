@@ -107,4 +107,35 @@ export const taskRoutes = new Hono()
         message: "Tasks reordered successfully.",
       });
     },
-  );
+  )
+  .put("/move/:taskId{[0-9]+}/to/:newColumnId{[0-9]+}", async (c) => {
+    const taskId = c.req.param("taskId");
+    const newColumnId = c.req.param("newColumnId");
+
+    // Fetch the task to ensure it exists
+    const task = await db
+      .select()
+      .from(taskTable)
+      .where(eq(taskTable.id, Number(taskId)))
+      .limit(1);
+
+    if (task.length === 0) {
+      c.status(404);
+      return c.json({
+        success: false,
+        message: "Task not found",
+      });
+    }
+
+    // Update the task's columnId to move it to the new column
+    await db
+      .update(taskTable)
+      .set({ columnId: Number(newColumnId) })
+      .where(eq(taskTable.id, Number(taskId)));
+
+    c.status(200);
+    return c.json({
+      success: true,
+      message: "Task moved successfully",
+    });
+  });
