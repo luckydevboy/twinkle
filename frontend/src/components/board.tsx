@@ -69,10 +69,13 @@ const Board = ({ board }: Props) => {
       const startColumn = state.columns[sourceDroppableId];
       const finishColumn = state.columns[destinationDroppableId];
 
+      const _draggableId = Number(draggableId.split("-")[1]);
+
+      // Reorder task in a column
       if (startColumn === finishColumn) {
         const newTaskIds = Array.from(startColumn.taskIds);
         newTaskIds.splice(source.index, 1);
-        newTaskIds.splice(destination.index, 0, Number(draggableId));
+        newTaskIds.splice(destination.index, 0, Number(_draggableId));
 
         const newColumn: IColumn = {
           ...startColumn,
@@ -105,8 +108,6 @@ const Board = ({ board }: Props) => {
         taskIds: startTasksIds,
       };
 
-      const _draggableId = Number(draggableId.split("-")[1]);
-
       const finishTaskIds = Array.from(finishColumn.taskIds);
       finishTaskIds.splice(destination.index, 0, _draggableId);
       const newFinishColumn: IColumn = {
@@ -127,7 +128,7 @@ const Board = ({ board }: Props) => {
       moveTaskToAnotherColumn.mutateAsync({
         taskId: _draggableId,
         newColumnId: newFinishColumn.id,
-        position: destination.index,
+        newPosition: destination.index + 1,
       });
     }
   };

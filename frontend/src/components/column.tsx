@@ -16,7 +16,6 @@ import {
 } from "@/components";
 import { IColumn, ITask } from "@/interfaces";
 import { useCreateTask } from "@/api";
-import { ScrollArea } from "./ui/scroll-area";
 
 type Props = {
   column: IColumn;

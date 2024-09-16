@@ -68,6 +68,7 @@ export const taskRoutes = new Hono()
       data: null,
     });
   })
+  // Reorder tasks in a column
   .put(
     "/:columnId{[0-9]+}/reorder",
     zValidator("json", z.object({ taskIds: z.array(z.number().int()) })),
@@ -75,6 +76,7 @@ export const taskRoutes = new Hono()
       const columnId = c.req.param("columnId");
       const { taskIds } = c.req.valid("json");
 
+      // Fetch the tasks in the column to ensure they belong to the column
       const tasks = await db
         .select()
         .from(taskTable)
@@ -82,6 +84,7 @@ export const taskRoutes = new Hono()
 
       const validTaskIds = tasks.map((task) => task.id);
 
+      // Ensure all task IDs provided are valid
       const isValid = taskIds.every((taskId) => validTaskIds.includes(taskId));
 
       if (!isValid) {
@@ -92,50 +95,74 @@ export const taskRoutes = new Hono()
         });
       }
 
+      // Update each task's order according to the new order in taskIds
       await Promise.all(
         taskIds.map((taskId, index) =>
           db
             .update(taskTable)
-            .set({ order: index + 1 })
-            .where(eq(taskTable.id, Number(taskId))),
+            .set({ order: index }) // Set the order based on the array index
+            .where(eq(taskTable.id, taskId)),
         ),
       );
 
-      c.status(201);
+      c.status(200);
       return c.json({
         success: true,
         message: "Tasks reordered successfully.",
       });
     },
   )
-  .put("/move/:taskId{[0-9]+}/to/:newColumnId{[0-9]+}", async (c) => {
-    const taskId = c.req.param("taskId");
-    const newColumnId = c.req.param("newColumnId");
+  // Move a task from one column to another
+  .put(
+    "/move/:taskId{[0-9]+}/to/:newColumnId{[0-9]+}",
+    zValidator("json", z.object({ newPosition: z.number() })),
+    async (c) => {
+      const taskId = c.req.param("taskId");
+      const newColumnId = c.req.param("newColumnId");
+      const { newPosition } = c.req.valid("json");
 
-    // Fetch the task to ensure it exists
-    const task = await db
-      .select()
-      .from(taskTable)
-      .where(eq(taskTable.id, Number(taskId)))
-      .limit(1);
+      // Fetch the task to ensure it exists
+      const task = await db
+        .select()
+        .from(taskTable)
+        .where(eq(taskTable.id, Number(taskId)))
+        .limit(1);
 
-    if (task.length === 0) {
-      c.status(404);
+      if (task.length === 0) {
+        c.status(404);
+        return c.json({
+          success: false,
+          message: "Task not found",
+        });
+      }
+
+      // Fetch tasks in the new column to determine position
+      const tasksInNewColumn = await db
+        .select()
+        .from(taskTable)
+        .where(eq(taskTable.columnId, Number(newColumnId)))
+        .orderBy(taskTable.order);
+
+      // Adjust order of tasks after the new position in the new column
+      await Promise.all(
+        tasksInNewColumn.slice(newPosition - 1).map((task, index) =>
+          db
+            .update(taskTable)
+            .set({ order: newPosition + index + 1 })
+            .where(eq(taskTable.id, task.id)),
+        ),
+      );
+
+      // Move task to new column and update its order
+      await db
+        .update(taskTable)
+        .set({ columnId: Number(newColumnId), order: newPosition })
+        .where(eq(taskTable.id, Number(taskId)));
+
+      c.status(200);
       return c.json({
-        success: false,
-        message: "Task not found",
+        success: true,
+        message: "Task moved successfully and positioned correctly",
       });
-    }
-
-    // Update the task's columnId to move it to the new column
-    await db
-      .update(taskTable)
-      .set({ columnId: Number(newColumnId) })
-      .where(eq(taskTable.id, Number(taskId)));
-
-    c.status(200);
-    return c.json({
-      success: true,
-      message: "Task moved successfully",
-    });
-  });
+    },
+  );
