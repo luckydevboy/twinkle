@@ -13,8 +13,9 @@ export const mapBoardFromDto = (board: IBoardDto): IBoard => {
 
     column.tasks.forEach((task) => {
       tasks[task.id] = { id: task.id, content: task.name };
-      columns[column.id].taskIds.push(task.id);
+      columns[column.id].taskIds[task.order] = task.id;
     });
+    columns[column.id].taskIds = columns[column.id].taskIds.filter((id) => id);
   });
 
   return {
