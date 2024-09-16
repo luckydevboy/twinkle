@@ -56,17 +56,17 @@ const Column = ({ column, tasks, index }: Props) => {
         <Card
           {...provided.draggableProps}
           ref={provided.innerRef}
-          className="w-96 flex-shrink-0 max-h-[calc(100vh-68px-16px-16px)]"
+          className="w-96 flex-shrink-0 h-fit"
         >
           <CardHeader {...provided.dragHandleProps}>
             <CardTitle className="flex items-center justify-between">
               <div className="flex items-center gap-x-2">
                 <h2 className="">{column.title}</h2>
-                <div className="w-6 h-6 text-xs rounded-full bg-zinc-100 text-zinc-500 flex items-center justify-center">
+                <div className="w-6 h-6 text-xs rounded-full bg-secondary text-primary flex items-center justify-center">
                   {tasks.length}
                 </div>
               </div>
-              <EllipsisHorizontalIcon className="w-6 h-6 text-zinc-400" />
+              <EllipsisHorizontalIcon className="w-6 h-6 text-primary" />
             </CardTitle>
           </CardHeader>
           <Droppable droppableId={`column-${String(column.id)}`} type="task">
