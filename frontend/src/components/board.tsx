@@ -89,7 +89,6 @@ const Board = ({ board }: Props) => {
             [newColumn.id]: newColumn,
           },
         };
-
         setState(newState);
 
         reorderTasksInColumns.mutateAsync({
