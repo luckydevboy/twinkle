@@ -8,7 +8,6 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { ReactNode } from "react";
-import { ThemeProvider } from "./theme-provider";
 
 function makeQueryClient() {
   return new QueryClient({

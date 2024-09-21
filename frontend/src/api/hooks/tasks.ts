@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 
 import {
   createTask,
+  deleteTask,
   moveTaskToAnotherColumn,
   reorderTasksInColumn,
 } from "@/api";
@@ -9,6 +10,12 @@ import {
 export const useCreateTask = () => {
   return useMutation({
     mutationFn: createTask,
+  });
+};
+
+export const useDeleteTask = () => {
+  return useMutation({
+    mutationFn: deleteTask,
   });
 };
 
