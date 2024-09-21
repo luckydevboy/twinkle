@@ -42,21 +42,26 @@ export const taskRoutes = new Hono()
       data: { task },
     });
   })
-  .put("/:id{[0-9]+}", zValidator("json", insertTasksSchema), async (c) => {
-    const id = c.req.param("id");
-    const task = c.req.valid("json");
+  // Edit task name
+  .put(
+    "/:id{[0-9]+}",
+    zValidator("json", z.object({ name: z.string() })),
+    async (c) => {
+      const id = c.req.param("id");
+      const task = c.req.valid("json");
 
-    await db
-      .update(taskTable)
-      .set(task)
-      .where(eq(taskTable.id, Number(id)));
+      await db
+        .update(taskTable)
+        .set(task)
+        .where(eq(taskTable.id, Number(id)));
 
-    c.status(201);
-    return c.json({
-      success: true,
-      data: { task },
-    });
-  })
+      c.status(201);
+      return c.json({
+        success: true,
+        data: { task },
+      });
+    },
+  )
   .delete(":id{[0-9]+}", async (c) => {
     const id = c.req.param("id");
 

@@ -1,6 +1,6 @@
 import ky from "ky";
 
-import { IColumnDto, IResponseDto } from "@/dto";
+import { IColumnDto, IResponseDto } from "../dto";
 
 export const createColumn = (data: {
   name: string;

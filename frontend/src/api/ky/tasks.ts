@@ -12,6 +12,12 @@ export const deleteTask = async (id: number) => {
   return ky.delete(`api/v1/tasks/${id}`);
 };
 
+export const editTask = async (data: { id: number; content?: string }) => {
+  const { id, content } = data;
+
+  ky.put(`api/v1/tasks/${id}`, { json: { name: content } });
+};
+
 export const moveTaskToAnotherColumn = async (data: {
   taskId: number;
   newColumnId: number;
