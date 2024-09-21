@@ -8,6 +8,10 @@ export const createTask = (data: {
   return ky.post("api/v1/tasks", { json: data });
 };
 
+export const deleteTask = async (id: number) => {
+  return ky.delete(`api/v1/tasks/${id}`);
+};
+
 export const moveTaskToAnotherColumn = async (data: {
   taskId: number;
   newColumnId: number;
