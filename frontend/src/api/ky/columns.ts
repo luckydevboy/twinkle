@@ -14,6 +14,11 @@ export const createColumn = (data: {
     .json();
 };
 
+export const editColumn = (data: { columnId: number; name: string }) => {
+  const { columnId, name } = data;
+  return ky.put(`api/v1/columns/${columnId}`, { json: { name } }).json();
+};
+
 export const reorderColumns = (data: {
   boardId: number;
   columnIds: number[];

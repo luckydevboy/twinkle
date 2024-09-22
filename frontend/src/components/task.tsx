@@ -86,6 +86,7 @@ const Task = ({ task, index }: Props) => {
                         />
                         {isEditing &&
                           // FIXME: isPending doesn't work
+                          // TODO: Make the svg a component
                           (editTask.isPending ? (
                             <svg
                               className="animate-spin h-4 w-4 text-white absolute top-1 right-0"
@@ -134,19 +135,19 @@ const Task = ({ task, index }: Props) => {
               </ContextMenuTrigger>
               <ContextMenuContent>
                 <DialogTrigger asChild>
-                  <ContextMenuItem className="flex items-center justify-between">
+                  <ContextMenuItem className="flex items-center justify-between cursor-pointer">
                     <div>Delete</div>
                     <TrashIcon className="text-primary h-4 w-4" />
                   </ContextMenuItem>
                 </DialogTrigger>
                 <ContextMenuItem
-                  className="flex items-center justify-between"
+                  className="flex items-center justify-between cursor-pointer"
                   onClick={() => setIsEditing(true)}
                 >
                   <div>Edit</div>
                   <PencilIcon className="text-primary h-4 w-4" />
                 </ContextMenuItem>
-                <ContextMenuItem className="flex items-center justify-between">
+                <ContextMenuItem className="flex items-center justify-between cursor-pointer">
                   <div>Assign</div>
                   <UserIcon className="text-primary h-4 w-4" />
                 </ContextMenuItem>

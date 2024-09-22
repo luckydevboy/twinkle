@@ -34,22 +34,26 @@ export const columnRoutes = new Hono()
       data: result[0],
     });
   })
-  // Update a column
-  .put("/:id{[0-9]+}", zValidator("json", insertColumnSchema), async (c) => {
-    const id = c.req.param("id");
-    const column = c.req.valid("json");
+  // Update column name
+  .put(
+    "/:id{[0-9]+}",
+    zValidator("json", z.object({ name: z.string() })),
+    async (c) => {
+      const id = c.req.param("id");
+      const column = c.req.valid("json");
 
-    await db
-      .update(columnTable)
-      .set(column)
-      .where(eq(columnTable.id, Number(id)));
+      await db
+        .update(columnTable)
+        .set(column)
+        .where(eq(columnTable.id, Number(id)));
 
-    c.status(201);
-    return c.json({
-      success: true,
-      data: { column },
-    });
-  })
+      c.status(201);
+      return c.json({
+        success: true,
+        data: { column },
+      });
+    },
+  )
   // delete a column
   .delete(":id{[0-9]+}", async (c) => {
     const id = c.req.param("id");
