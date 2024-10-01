@@ -5,7 +5,7 @@ import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 import { IBoard, IColumn } from "@/interfaces";
-import { Button, Card, CardHeader, Column, Input } from "@/components";
+import { Button, Card, CardHeader, Column, Input } from "@/components/index";
 import {
   useCreateColumn,
   useMoveTaskToAnotherColumn,

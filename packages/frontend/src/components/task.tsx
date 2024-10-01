@@ -30,7 +30,7 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
-} from "@/components";
+} from "@/components/ui";
 import { ITask } from "@/interfaces";
 import { useDeleteTask, useEditTask } from "@/api";
 

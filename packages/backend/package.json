@@ -1,13 +1,13 @@
 {
-  "name": "server",
+  "name": "backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "bun --watch src/index.ts",
-    "migration:generate": "pnpm drizzle-kit generate",
+    "migration:generate": "bun drizzle-kit generate",
     "migration:push": "bun run src/db/migrate.ts",
-    "migrate": "pnpm drizzle-kit generate && bun run src/db/migrate.ts"
+    "migrate": "bun drizzle-kit generate && bun run src/db/migrate.ts"
   },
   "keywords": [],
   "author": "",

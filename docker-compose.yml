@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   db:
     image: postgres
@@ -18,3 +18,18 @@ services:
     restart: always
     ports:
       - 8080:8080
+
+  frontend:
+    restart: unless-stopped
+    image: twinkle_frontend
+    init: true
+    expose:
+      - 3000
+    ports:
+      - '3000:3000'
+    build:
+      context: packages/frontend/Dockerfile
+      args:
+        CI: ${CI}
+    extra_hosts:
+      - host.docker.internal:host-gateway

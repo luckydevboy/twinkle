@@ -22,7 +22,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   Task,
-} from "@/components";
+} from "@/components/index";
 import { IColumn, ITask } from "@/interfaces";
 import { useCreateTask, useEditColumn } from "@/api";
 

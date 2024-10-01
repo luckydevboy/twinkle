@@ -1,12 +1,7 @@
 {
   "name": "twinkle",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "devDependencies": {
-    "prettier": "^3.3.3"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
 }

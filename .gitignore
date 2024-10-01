@@ -2,43 +2,43 @@
 
 # frontend
 # dependencies
-frontend/node_modules
-frontend/.pnp
-frontend/.pnp.js
-frontend/.yarn/install-state.gz
+packages/frontend/node_modules
+packages/frontend/.pnp
+packages/frontend/.pnp.js
+packages/frontend/.yarn/install-state.gz
 
 # testing
-frontend/coverage
+packages/frontend/coverage
 
 # next.js
-frontend/.next/
-frontend/out/
+packages/frontend/.next/
+packages/frontend/out/
 
 # production
-frontend/build
+packages/frontend/build
 
 # misc
-frontend/.DS_Store
+packages/frontend/.DS_Store
 frontend/*.pem
 
 # debug
-frontend/npm-debug.log*
-frontend/yarn-debug.log*
-frontend/yarn-error.log*
+packages/frontend/npm-debug.log*
+packages/frontend/yarn-debug.log*
+packages/frontend/yarn-error.log*
 
 # local env files
-frontend/.env*.local
+packages/frontend/.env*.local
 
 # vercel
-frontend/.vercel
+packages/frontend/.vercel
 
 # typescript
 frontend/*.tsbuildinfo
-frontend/next-env.d.ts
+packages/frontend/next-env.d.ts
 
-# server
-server/node_modules
-server/.env*
+# backend
+packages/backend/node_modules
+packages/backend/.env*
 
 # Docker generated files
 postgres
