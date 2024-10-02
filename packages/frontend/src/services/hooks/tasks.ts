@@ -6,7 +6,7 @@ import {
   editTask,
   moveTaskToAnotherColumn,
   reorderTasksInColumn,
-} from "@/api";
+} from "@/services";
 
 export const useCreateTask = () => {
   return useMutation({

@@ -11,7 +11,7 @@ import {
   useMoveTaskToAnotherColumn,
   useReorderColumns,
   useReorderTasksInColumn,
-} from "@/api";
+} from "@/services";
 
 type Props = {
   board: IBoard;

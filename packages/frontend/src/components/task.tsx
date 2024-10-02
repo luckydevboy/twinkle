@@ -32,7 +32,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui";
 import { ITask } from "@/interfaces";
-import { useDeleteTask, useEditTask } from "@/api";
+import { useDeleteTask, useEditTask } from "@/services";
 
 type Props = {
   task: ITask;

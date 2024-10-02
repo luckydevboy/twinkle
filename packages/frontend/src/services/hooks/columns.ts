@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 
-import { createColumn, editColumn, reorderColumns } from "@/api";
+import { createColumn, editColumn, reorderColumns } from "@/services";
 
 export const useReorderColumns = () => {
   return useMutation({

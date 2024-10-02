@@ -1,6 +1,6 @@
 "use client";
 
-import { useGetBoard } from "@/api";
+import { useGetBoard } from "@/services";
 import { Board } from "@/components";
 import { Skeleton } from "@/components/ui/skeleton";
 

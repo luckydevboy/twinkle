@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getBoard } from "@/api";
+import { getBoard } from "@/services";
 import { mapBoardFromDto } from "../mappers";
 
 export const useGetBoard = (id: number) => {

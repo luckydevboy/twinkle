@@ -24,7 +24,7 @@ import {
   Task,
 } from "@/components/index";
 import { IColumn, ITask } from "@/interfaces";
-import { useCreateTask, useEditColumn } from "@/api";
+import { useCreateTask, useEditColumn } from "@/services";
 
 type Props = {
   column: IColumn;
