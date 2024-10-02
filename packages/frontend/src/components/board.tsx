@@ -138,7 +138,7 @@ const Board = ({ board }: Props) => {
       .mutateAsync({
         boardId: board.id,
         name: newColumnTitle,
-        order: board.columnOrder.length + 1,
+        order: state.columnOrder.length + 1,
       })
       .then((res) => {
         setState({
