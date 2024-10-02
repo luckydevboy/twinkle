@@ -224,7 +224,7 @@ const Board = ({ board }: Props) => {
         ) : (
           <div className="space-y-2">
             {state.columnOrder.length === 0 && (
-              <div>Create your first column...</div>
+              <div>Create your first column 🚀</div>
             )}
             <Button
               variant="outline"
