@@ -6,3 +6,4 @@ export * from "./input";
 export * from "./dialog";
 export * from "./context-menu";
 export * from "./popover";
+export * from "./separator";

@@ -163,70 +163,79 @@ const Board = ({ board }: Props) => {
   };
 
   return (
-    <div className="flex p-4 gap-x-10 overflow-x-auto">
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable
-          droppableId="all-columns"
-          direction="horizontal"
-          type="column"
-        >
-          {(provided) => (
-            <div
-              className="flex gap-x-10"
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
-              {state.columnOrder.map((columnId, index) => {
-                const column = state.columns[columnId];
-                const tasks = column.taskIds.map(
-                  (taskId) => state.tasks[taskId],
-                );
+    <div className="flex overflow-x-auto">
+      {state.columnOrder.length ? (
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable
+            droppableId="all-columns"
+            direction="horizontal"
+            type="column"
+          >
+            {(provided) => (
+              <div
+                className="flex gap-x-4 px-4"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                {state.columnOrder.map((columnId, index) => {
+                  const column = state.columns[columnId];
+                  const tasks = column.taskIds.map(
+                    (taskId) => state.tasks[taskId],
+                  );
 
-                return (
-                  <Column
-                    key={column.id}
-                    column={column}
-                    tasks={tasks}
-                    index={index}
-                  />
-                );
-              })}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-      {isAddingNewColumn ? (
-        <Card className="w-96 h-fit flex-shrink-0">
-          <CardHeader>
-            <form className="space-y-3" onSubmit={handleAddNewColumn}>
-              <Input
-                placeholder="Enter column name..."
-                value={newColumnTitle}
-                onChange={({ target }) => setNewColumnTitle(target.value)}
-                autoFocus={isAddingNewColumn}
-              />
-              <div className="flex items-center gap-x-3">
-                <Button className="" disabled={!newColumnTitle}>
-                  Add
-                </Button>
-                <XMarkIcon
-                  className="w-5 h-5 text-zinc-500 cursor-pointer"
-                  onClick={handleClose}
-                />
+                  return (
+                    <Column
+                      key={column.id}
+                      column={column}
+                      tasks={tasks}
+                      index={index}
+                    />
+                  );
+                })}
+                {provided.placeholder}
               </div>
-            </form>
-          </CardHeader>
-        </Card>
+            )}
+          </Droppable>
+        </DragDropContext>
       ) : (
-        <Button
-          variant="outline"
-          className="flex-shrink-0"
-          onClick={() => setIsAddingNewColumn(true)}
-        >
-          Add new column
-        </Button>
+        <></>
       )}
+      <div className={state.columnOrder.length === 0 ? "px-4" : ""}>
+        {isAddingNewColumn ? (
+          <Card className="w-80 h-fit flex-shrink-0">
+            <CardHeader>
+              <form className="space-y-3" onSubmit={handleAddNewColumn}>
+                <Input
+                  placeholder="Enter column name..."
+                  value={newColumnTitle}
+                  onChange={({ target }) => setNewColumnTitle(target.value)}
+                  autoFocus={isAddingNewColumn}
+                />
+                <div className="flex items-center gap-x-3">
+                  <Button disabled={!newColumnTitle}>Add</Button>
+                  <XMarkIcon
+                    className="w-5 h-5 text-zinc-500 cursor-pointer"
+                    onClick={handleClose}
+                  />
+                </div>
+              </form>
+            </CardHeader>
+          </Card>
+        ) : (
+          <div className="space-y-2">
+            {state.columnOrder.length === 0 && (
+              <div>Create your first column...</div>
+            )}
+            <Button
+              variant="outline"
+              className="flex-shrink-0"
+              onClick={() => setIsAddingNewColumn(true)}
+            >
+              Add new column
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

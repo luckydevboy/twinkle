@@ -75,7 +75,7 @@ const Column = ({ column, tasks, index }: Props) => {
         <Card
           {...provided.draggableProps}
           ref={provided.innerRef}
-          className="w-96 flex-shrink-0 h-fit"
+          className="w-80 flex-shrink-0 h-fit"
         >
           <CardHeader {...provided.dragHandleProps}>
             <CardTitle className="flex items-center justify-between">

@@ -2,13 +2,19 @@
 
 import { useGetBoard } from "@/api";
 import { Board } from "@/components";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Home = () => {
-  // TODO: make id to be dynamic
   const { data, isPending, isError, error } = useGetBoard(1);
 
   if (isPending) {
-    return <div className="p-4">Loading...</div>;
+    return (
+      <div className="px-4 flex gap-x-4">
+        <Skeleton className="w-80 h-48 rounded-lg" />
+        <Skeleton className="w-80 h-80 rounded-lg" />
+        <Skeleton className="w-80 h-56 rounded-lg" />
+      </div>
+    );
   }
 
   if (isError) {
