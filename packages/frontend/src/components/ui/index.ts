@@ -7,3 +7,4 @@ export * from "./dialog";
 export * from "./context-menu";
 export * from "./popover";
 export * from "./separator";
+export * from "./scroll-area";

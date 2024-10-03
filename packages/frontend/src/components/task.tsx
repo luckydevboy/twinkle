@@ -9,7 +9,6 @@ import {
   PencilIcon,
   CheckIcon,
 } from "@heroicons/react/24/outline";
-import { clsx } from "clsx";
 
 import {
   Avatar,
@@ -33,6 +32,7 @@ import {
 } from "@/components/ui";
 import { ITask } from "@/interfaces";
 import { useDeleteTask, useEditTask } from "@/services";
+import { cx } from "class-variance-authority";
 
 type Props = {
   task: ITask;
@@ -75,7 +75,7 @@ const Task = ({ task, index }: Props) => {
                     <div className="flex-1">
                       <form className="relative" onSubmit={handleEdit}>
                         <input
-                          className={clsx([
+                          className={cx([
                             "bg-inherit font-medium leading-none mb-3 text-sm outline-none w-full",
                             isEditing && "border-primary border-b",
                           ])}
