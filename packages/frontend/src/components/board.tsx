@@ -172,7 +172,7 @@ const Board = ({ board }: Props) => {
   };
 
   return (
-    <ScrollArea className="pb-4">
+    <ScrollArea className="pb-4 h-[calc(100vh-85px)]">
       <div className="flex">
         {state.columnOrder.length ? (
           <DragDropContext onDragEnd={onDragEnd}>
