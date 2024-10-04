@@ -1,13 +1,8 @@
 "use client";
 
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  CheckIcon,
-  EllipsisHorizontalIcon,
-  PencilIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { cx } from "class-variance-authority";
 
@@ -18,9 +13,6 @@ import {
   CardHeader,
   CardTitle,
   Input,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
   ScrollArea,
   Task,
 } from "@/components";
@@ -37,10 +29,10 @@ const Column = ({ column, tasks, index }: Props) => {
   const [isAddingNewTask, setIsAddingNewTask] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [title, setTitle] = useState(column.title);
-  const [isEditing, setIsEditing] = useState(false);
   const createTask = useCreateTask();
   const editColumn = useEditColumn();
   const queryClient = useQueryClient();
+  const titleInputRef = useRef<HTMLInputElement>(null);
 
   const handleAddNewTask = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -60,7 +52,9 @@ const Column = ({ column, tasks, index }: Props) => {
   const handleEdit = (e: SyntheticEvent) => {
     e.preventDefault();
     editColumn.mutateAsync({ columnId: column.id, name: title }).then(() => {
-      setIsEditing(false);
+      if (titleInputRef.current) {
+        titleInputRef.current.blur();
+      }
     });
   };
 
@@ -78,68 +72,23 @@ const Column = ({ column, tasks, index }: Props) => {
           className="w-80 flex-shrink-0 h-fit"
         >
           <CardHeader {...provided.dragHandleProps}>
-            <CardTitle className="flex items-center justify-between">
-              <div className="flex items-center gap-x-2">
-                <form className="relative" onSubmit={handleEdit}>
+            <CardTitle className="flex items-center justify-between pr-2">
+              <div className="flex items-center justify-between gap-x-4 w-full">
+                <form className="relative w-full" onSubmit={handleEdit}>
                   <input
+                    ref={titleInputRef}
                     className={cx([
-                      "bg-inherit font-semibold leading-none text-lg outline-none",
-                      isEditing && "border-primary border-b",
+                      "bg-inherit border border-transparent rounded-md px-2 py-1 pl-2 font-bold leading-none text-md outline-none w-full focus:border-secondary shadow",
                     ])}
-                    style={{ width: `${title.length + (isEditing ? 2 : 0)}ch` }}
                     value={title}
-                    disabled={!isEditing}
                     type="text"
                     onChange={({ target }) => setTitle(target.value)}
                   />
-                  {isEditing &&
-                    // FIXME: isPending doesn't work
-                    // TODO: Make the svg a component
-                    (editColumn.isPending ? (
-                      <svg
-                        className="animate-spin h-4 w-4 text-white absolute top-1 right-0"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          stroke-width="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                    ) : (
-                      <button type="submit" className="absolute top-1 right-0">
-                        <CheckIcon className="w-4 h-4 text-primary" />
-                      </button>
-                    ))}
                 </form>
-                <div className="w-6 h-6 text-xs rounded-full bg-secondary text-primary flex items-center justify-center">
+                <div className="w-6 h-6 text-xs flex-shrink-0 rounded-full bg-secondary text-primary flex items-center justify-center">
                   {tasks.length}
                 </div>
               </div>
-              <Popover>
-                <PopoverTrigger>
-                  <EllipsisHorizontalIcon className="w-6 h-6 text-primary" />
-                </PopoverTrigger>
-                <PopoverContent className="w-32 p-1">
-                  <div
-                    className="flex items-center justify-between text-sm hover:bg-accent hover:text-accent-foreground px-1.5 py-2 h-8 rounded-md cursor-pointer"
-                    onClick={() => setIsEditing(true)}
-                  >
-                    <div>Edit</div>
-                    <PencilIcon className="text-primary h-4 w-4" />
-                  </div>
-                </PopoverContent>
-              </Popover>
             </CardTitle>
           </CardHeader>
           <Droppable droppableId={`column-${String(column.id)}`} type="task">
