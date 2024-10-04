@@ -8,3 +8,4 @@ export * from "./context-menu";
 export * from "./popover";
 export * from "./separator";
 export * from "./scroll-area";
+export * from "./textarea";

@@ -1,3 +1,3 @@
-export * from "./boards";
-export * from "./columns";
-export * from "./tasks";
+export * from "./board";
+export * from "./column";
+export * from "./task";
