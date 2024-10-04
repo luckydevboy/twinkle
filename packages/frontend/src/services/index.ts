@@ -1,2 +1,2 @@
 export * from "./hooks";
-export * from "./ky";
+export * from "./https";

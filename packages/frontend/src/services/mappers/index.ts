@@ -1,4 +1,4 @@
-import { IBoardDto } from "@/services/dto";
+import { IBoardDto } from "../dtos";
 import { IBoard, IColumn, ITask } from "@/interfaces";
 
 export const mapBoardFromDto = (board: IBoardDto): IBoard => {
