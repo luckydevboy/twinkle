@@ -75,10 +75,10 @@ const Column = ({ column, tasks, index }: Props) => {
             <CardTitle className="flex items-center justify-between pr-2">
               <div className="flex items-center justify-between gap-x-4 w-full">
                 <form className="relative w-full" onSubmit={handleEdit}>
-                  <input
+                  <Input
                     ref={titleInputRef}
                     className={cx([
-                      "bg-inherit border border-transparent rounded-md px-2 py-1 pl-2 font-bold leading-none text-md outline-none w-full focus:border-secondary shadow",
+                      "border-transparent font-bold text-md outline-none w-full focus:border-secondary",
                     ])}
                     value={title}
                     type="text"
