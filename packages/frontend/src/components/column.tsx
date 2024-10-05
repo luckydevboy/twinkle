@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { cx } from "class-variance-authority";
+import { DotsVerticalIcon } from "@radix-ui/react-icons";
 
 import {
   Button,
@@ -12,12 +13,21 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
   Input,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   ScrollArea,
   Task,
 } from "@/components";
 import { IColumn, ITask } from "@/interfaces";
-import { useCreateTask, useEditColumn } from "@/services";
+import { useCreateTask, useDeleteColumn, useEditColumn } from "@/services";
 
 type Props = {
   column: IColumn;
@@ -33,6 +43,7 @@ const Column = ({ column, tasks, index }: Props) => {
   const editColumn = useEditColumn();
   const queryClient = useQueryClient();
   const titleInputRef = useRef<HTMLInputElement>(null);
+  const deleteColumn = useDeleteColumn();
 
   const handleAddNewTask = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -63,6 +74,12 @@ const Column = ({ column, tasks, index }: Props) => {
     setIsAddingNewTask(false);
   };
 
+  const handleDelete = () => {
+    deleteColumn.mutateAsync(column.id).then(() => {
+      queryClient.invalidateQueries({ queryKey: ["boards", 1] });
+    });
+  };
+
   return (
     <Draggable draggableId={String(column.id)} index={index}>
       {(provided) => (
@@ -85,8 +102,44 @@ const Column = ({ column, tasks, index }: Props) => {
                     onChange={({ target }) => setTitle(target.value)}
                   />
                 </form>
-                <div className="w-6 h-6 text-xs flex-shrink-0 rounded-full bg-secondary text-primary flex items-center justify-center">
-                  {tasks.length}
+                <div className="flex items-center gap-x-2">
+                  <div className="w-6 h-6 text-xs flex-shrink-0 rounded-full bg-secondary text-primary flex items-center justify-center">
+                    {tasks.length}
+                  </div>
+                  <Popover>
+                    <PopoverContent className="max-w-32 p-1.5">
+                      <Dialog>
+                        <DialogTrigger className="w-full">
+                          <div className="p-1.5 hover:bg-secondary text-sm rounded-sm cursor-pointer text-left">
+                            Delete
+                          </div>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Delete column</DialogTitle>
+                          </DialogHeader>
+                          Are you sure want to delete this column? All related
+                          tasks will be deleted too!
+                          <div className="flex gap-x-2 justify-end">
+                            <DialogClose>
+                              <Button variant="outline">Cancel</Button>
+                            </DialogClose>
+                            <Button
+                              variant="destructive"
+                              onClick={handleDelete}
+                              disabled={deleteColumn.isPending}
+                              isLoading={deleteColumn.isPending}
+                            >
+                              Delete
+                            </Button>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    </PopoverContent>
+                    <PopoverTrigger>
+                      <DotsVerticalIcon />
+                    </PopoverTrigger>
+                  </Popover>
                 </div>
               </div>
             </CardTitle>

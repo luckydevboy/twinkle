@@ -3,7 +3,11 @@ import { zValidator } from "@hono/zod-validator";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { column as columnTable, insertColumnSchema } from "@/db/schema";
+import {
+  column as columnTable,
+  insertColumnSchema,
+  task as taskTable,
+} from "@/db/schema";
 import { db } from "@/db";
 
 export const columnRoutes = new Hono()
@@ -54,9 +58,11 @@ export const columnRoutes = new Hono()
       });
     },
   )
-  // delete a column
+  // delete a column and its tasks
   .delete(":id{[0-9]+}", async (c) => {
     const id = c.req.param("id");
+
+    await db.delete(taskTable).where(eq(taskTable.columnId, Number(id)));
 
     await db.delete(columnTable).where(eq(columnTable.id, Number(id)));
 

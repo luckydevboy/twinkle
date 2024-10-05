@@ -19,6 +19,8 @@ export const editColumn = (data: { columnId: number; name: string }) => {
   return ky.put(`api/v1/columns/${columnId}`, { json: { name } }).json();
 };
 
+export const deleteColumn = (id: number) => ky.delete(`api/v1/columns/${id}`);
+
 export const reorderColumns = (data: {
   boardId: number;
   columnIds: number[];
