@@ -1,63 +1,110 @@
 # Twinkle
 
-**Twinkle** is a simple task management application inspired by Trello. It provides an intuitive interface for managing tasks with features like drag-and-drop, task assignment, and user authentication.
+Twinkle is a task management application inspired by Trello, designed to help users efficiently manage their tasks and collaborate with others. It features a modern user interface, drag-and-drop functionality, and robust authentication.
 
 ## Features
 
-- **Drag and Drop**: Easily reorder tasks and columns using drag-and-drop functionality.
-- **Task Assignment**: Assign tasks to different users for better organization.
-- **Authentication**: Secure login and user management.
+- **Task Management:** Create, update, and delete tasks effortlessly.
+- **Drag and Drop:** Easily rearrange tasks and lists with a smooth drag-and-drop interface.
+- **User Authentication:** Secure sign-up and login functionality for user accounts.
+- **Collaborative Workspaces:** Work together with team members by sharing boards.
+- **Responsive Design:** Optimized for both desktop and mobile devices.
+
+## Technologies Used
+
+- **Frontend:**
+   - [Next.js](https://nextjs.org/)
+   - [React](https://reactjs.org/)
+   - [Radix UI](https://www.radix-ui.com/)
+   - [React Query](https://react-query.tanstack.com/)
+
+- **Backend:**
+   - [Bun](https://bun.sh/)
+   - [Drizzle ORM](https://orm.drizzle.team/)
+   - [Hono](https://hono.dev/)
+
+- **Database:**
+   - [PostgreSQL](https://www.postgresql.org/)
 
 ## Installation
 
-To set up **Twinkle** locally, follow these steps:
+### Prerequisites
 
-1. **Clone the Repository**
+- Node.js (version 14 or later)
+- Bun (version 0.6 or later)
+- PostgreSQL
 
-   ```bash
-   git clone https://github.com/luckydevboy/twinkle
-   cd twinkle
-   ```
+### Clone the Repository
 
-2. **Install Dependencies**
+```bash
+git clone https://github.com/luckydevboy/twinkle.git
+cd twinkle
+```
 
-   **Ensure you have [pnpm](https://pnpm.io) and [bun](https://bun.sh/) installed.**
+### Install Dependencies
 
-   ```bash
-   pnpm install
-   ```
+For the frontend:
 
-3. **Run the Application**
+```bash
+cd frontend
+npm install
+```
 
-   To start both frontend and server workspaces, use:
+For the backend:
 
-   ```bash
-   pnpm run dev
-   ```
+```bash
+cd server
+bun install
+```
 
-   This will start the development server and the frontend.
+### Setup the Database
+
+1. Create a new PostgreSQL database.
+2. Configure the database connection settings in the backend's `.env` file.
+
+### Run the Application
+
+To run the backend server:
+
+```bash
+cd server
+bun run dev
+```
+
+To run the frontend application:
+
+```bash
+cd frontend
+npm run dev
+```
+
+The application should now be running on [http://localhost:3000](http://localhost:3000).
 
 ## Usage
 
-Once the application is running, you can access it at `http://localhost:3000` in your browser. Use the provided authentication system to log in and start managing your tasks.
+- **Create an Account:** Sign up to start managing your tasks.
+- **Create Boards:** Set up different boards for various projects.
+- **Add Tasks:** Create tasks within boards and assign them to team members.
+- **Drag and Drop:** Rearrange tasks and lists as needed for better organization.
 
 ## Contributing
 
-We welcome contributions to **Twinkle**! To contribute:
+Contributions are welcome! If you would like to contribute to Twinkle, please follow these steps:
 
-1. **Fork the Repository**
-2. **Create a Branch**: `git checkout -b feature/YourFeature`
-3. **Make Your Changes**
-4. **Commit Your Changes**: `git commit -am 'Add new feature'`
-5. **Push to the Branch**: `git push origin feature/YourFeature`
-6. **Create a Pull Request**
-
-Please ensure that your code adheres to the project's coding standards and includes appropriate tests.
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Commit your changes and push to your fork.
+4. Open a pull request detailing your changes.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Inspiration from Trello
+- Special thanks to the open-source community for their invaluable contributions.
 
 ## Contact
 
-For any questions or support, please reach out to [mrghasemi1992@gmail.com](mailto:mrghasemi1992@gmail.com).
+For inquiries or feedback, please reach out to [your email](mailto:your-email@example.com).
