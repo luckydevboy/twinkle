@@ -24,3 +24,8 @@ export interface IResponseDto<T> {
   success: boolean;
   data: T;
 }
+
+export interface AuthResponseDto {
+  success: boolean;
+  token: string;
+}

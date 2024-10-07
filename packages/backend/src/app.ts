@@ -1,13 +1,15 @@
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 import { jwt } from "hono/jwt";
+import { cors } from "hono/cors";
 
 import { authRoutes, boardRoutes, columnRoutes, taskRoutes } from "./routes";
-import * as process from "node:process";
 
 const app = new Hono();
 
 app.use(logger());
+
+app.use("/api/v1/*", cors());
 
 app.use(
   "/api/v1/boards/*",

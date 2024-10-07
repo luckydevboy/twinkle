@@ -1,4 +1,4 @@
-import ky from "ky";
+import { ky } from "@/services";
 
 export const createTask = (data: {
   name: string;

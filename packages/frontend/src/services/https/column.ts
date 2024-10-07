@@ -1,5 +1,4 @@
-import ky from "ky";
-
+import { ky } from "@/services";
 import { IColumnDto, IResponseDto } from "../dtos";
 
 export const createColumn = (data: {
