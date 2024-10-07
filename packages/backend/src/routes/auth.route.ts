@@ -1,48 +1,62 @@
 import { Hono } from "hono";
+// @ts-ignore
 import bcrypt from "bcrypt";
+// @ts-ignore
 import jwt from "jsonwebtoken";
 import { zValidator } from "@hono/zod-validator";
 import { eq } from "drizzle-orm";
 
-import { users, userSchema } from "@/db/schema";
+import { loginSchema, user, userSchema } from "@/db/schema";
 import { db } from "@/db";
 
 export const authRoutes = new Hono()
   .post("/register", zValidator("json", userSchema), async (c) => {
-    const { email, password } = c.req.valid("json");
+    const { email, password, firstName, lastName } = c.req.valid("json");
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const result = await db
-      .insert(users)
+      .insert(user)
       .values({
         email,
+        firstName,
+        lastName,
         password: hashedPassword,
       })
-      .returning();
+      .returning({
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      });
+
+    const token = jwt.sign(
+      { id: result[0].id, email: result[0].email },
+      process.env.JWT_SECRET,
+    );
 
     c.status(201);
     return c.json({
       success: true,
-      data: result[0],
+      token,
     });
   })
-  .post("/login", zValidator("json", userSchema), async (c) => {
+  .post("/login", zValidator("json", loginSchema), async (c) => {
     const { email, password } = c.req.valid("json");
 
-    const user = await db
+    const _user = await db
       .select()
-      .from(users)
-      .where(eq(users.email, email))
+      .from(user)
+      .where(eq(user.email, email))
       .limit(1);
 
-    if (!user || !(await bcrypt.compare(password, user[0].password))) {
+    if (!_user || !(await bcrypt.compare(password, _user[0].password))) {
       c.status(401);
       return c.json({ success: false, message: "Invalid credentials" });
     }
 
     const token = jwt.sign(
-      { id: user[0].id, email: user[0].email },
+      { id: _user[0].id, email: _user[0].email },
       process.env.JWT_SECRET,
       {
         expiresIn: "1h",
@@ -54,24 +68,4 @@ export const authRoutes = new Hono()
       success: true,
       token,
     });
-  })
-  .get("/protected", async (c) => {
-    const authHeader = c.req.header("Authorization");
-
-    if (!authHeader) {
-      c.status(401);
-      return c.json({ success: false, message: "No token provided" });
-    }
-
-    const token = authHeader.split(" ")[1];
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      return c.json({
-        success: true,
-        user: decoded,
-      });
-    } catch (err) {
-      c.status(401);
-      return c.json({ success: false, message: "Unauthorized" });
-    }
   });

@@ -1,6 +1,6 @@
 {
-  "id": "3d2120d0-86a7-463e-9d52-53f9a7bae5ca",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "0694231c-97c3-4e9d-aefd-a1a176680ff7",
+  "prevId": "3d2120d0-86a7-463e-9d52-53f9a7bae5ca",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -19,10 +19,30 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "board_user_id_user_id_fk": {
+          "name": "board_user_id_user_id_fk",
+          "tableFrom": "board",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
