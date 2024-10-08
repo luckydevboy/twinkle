@@ -6,6 +6,7 @@ export default defineConfig({
     "./src/db/schema/board.schema.ts",
     "./src/db/schema/column.schema.ts",
     "./src/db/schema/task.schema.ts",
+    "./src/db/schema/user.schema.ts",
   ],
   out: "drizzle",
   dbCredentials: {

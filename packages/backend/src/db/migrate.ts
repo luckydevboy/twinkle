@@ -1,5 +1,6 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
+// @ts-ignore
 import postgres from "postgres";
 import * as process from "node:process";
 

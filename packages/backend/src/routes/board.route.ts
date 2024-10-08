@@ -7,6 +7,7 @@ import {
   insertBoardSchema,
   column as columnsTable,
   task as tasksTable,
+  user as userTable,
 } from "@/db/schema";
 import { db } from "@/db";
 
@@ -62,8 +63,20 @@ export const boardRoutes = new Hono()
     const columnsWithTasks = await Promise.all(
       columns.map(async (column) => {
         const tasks = await db
-          .select()
+          .select({
+            id: tasksTable.id,
+            name: tasksTable.name,
+            description: tasksTable.description,
+            columnId: tasksTable.columnId,
+            user: {
+              id: tasksTable.userId,
+              firstName: userTable.firstName,
+              lastName: userTable.lastName,
+            },
+            order: tasksTable.order,
+          })
           .from(tasksTable)
+          .leftJoin(userTable, eq(tasksTable.userId, userTable.id))
           .where(eq(tasksTable.columnId, column.id));
 
         return {

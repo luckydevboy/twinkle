@@ -3,6 +3,8 @@
 import { Draggable } from "@hello-pangea/dnd";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { CheckIcon } from "@radix-ui/react-icons";
+import { cx } from "class-variance-authority";
 
 import {
   Avatar,
@@ -20,9 +22,10 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
+  Separator,
 } from "@/components";
 import { ITask } from "@/interfaces";
-import { useDeleteTask } from "@/services";
+import { useAssignUserToTask, useDeleteTask, useGetUsers } from "@/services";
 
 type Props = {
   task: ITask;
@@ -33,9 +36,17 @@ const Task = ({ task, index }: Props) => {
   const [title, setTitle] = useState(task.content);
   const deleteTask = useDeleteTask();
   const queryClient = useQueryClient();
+  const { data: users } = useGetUsers();
+  const assignUserToTask = useAssignUserToTask();
 
   const handleDelete = () => {
     deleteTask.mutateAsync(task.id).then(() => {
+      queryClient.invalidateQueries({ queryKey: ["boards", 1] });
+    });
+  };
+
+  const handleAssign = (userId: number) => {
+    assignUserToTask.mutateAsync({ taskId: task.id, userId }).then(() => {
       queryClient.invalidateQueries({ queryKey: ["boards", 1] });
     });
   };
@@ -64,10 +75,17 @@ const Task = ({ task, index }: Props) => {
                     </Badge>
                   </div>
                 </div>
-                <Avatar className="h-8 w-8">
-                  <AvatarImage alt="Johb Doe" />
-                  <AvatarFallback>JD</AvatarFallback>
-                </Avatar>
+                {task.user?.firstName && (
+                  <Avatar>
+                    <AvatarImage
+                      alt={task.user.firstName + " " + task.user.lastName}
+                    />
+                    <AvatarFallback>
+                      {task.user.firstName[0]}
+                      {task.user.lastName[0]}
+                    </AvatarFallback>
+                  </Avatar>
+                )}
               </CardHeader>
             </Card>
           </DialogTrigger>
@@ -85,8 +103,7 @@ const Task = ({ task, index }: Props) => {
             <div className="w-full">
               <Textarea
                 placeholder="Description"
-                className="w-full resize-none"
-                rows={3}
+                className="w-full resize-none h-full"
                 disabled
               />
             </div>
@@ -109,9 +126,47 @@ const Task = ({ task, index }: Props) => {
                 </PopoverContent>
               </Popover>
 
-              <Button variant="secondary" disabled>
-                Assign
-              </Button>
+              <Popover>
+                <PopoverTrigger>
+                  <Button variant="secondary">Assign</Button>
+                </PopoverTrigger>
+                <PopoverContent className="space-y-2 p-2">
+                  {users?.map((user, index) => (
+                    <>
+                      {index !== 0 && <Separator />}
+                      <div key={user.id} className="flex gap-x-2 items-center">
+                        <Avatar
+                          className={cx([
+                            "relative cursor-pointer",
+                            user.id === task.user?.id &&
+                              "border border-dashed border-primary/50",
+                            assignUserToTask.isPending && "animate-pulse",
+                          ])}
+                          onClick={() => handleAssign(user.id)}
+                        >
+                          {user.id === task.user?.id && (
+                            <>
+                              <div className="absolute inset-0 bg-background/80"></div>
+                              <CheckIcon className="w-6 h-6 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+                            </>
+                          )}
+                          <AvatarImage
+                            alt={user.firstName + " " + user.lastName}
+                          />
+                          <AvatarFallback>
+                            {user.firstName[0]}
+                            {user.lastName[0]}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="text-sm">
+                          {user.firstName} {user.lastName}
+                        </div>
+                      </div>
+                    </>
+                  ))}
+                </PopoverContent>
+              </Popover>
+
               <Button variant="secondary" disabled>
                 Tags
               </Button>

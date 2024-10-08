@@ -1,6 +1,5 @@
-import ky from "ky";
-
-import { IColumnDto, IResponseDto } from "../dtos";
+import { ky } from "@/services";
+import { ColumnDto, ResponseDto } from "../dtos";
 
 export const createColumn = (data: {
   name: string;
@@ -8,7 +7,7 @@ export const createColumn = (data: {
   order: number;
 }) => {
   return ky
-    .post<IResponseDto<Omit<IColumnDto, "tasks">>>("api/v1/columns", {
+    .post<ResponseDto<Omit<ColumnDto, "tasks">>>("api/v1/columns", {
       json: data,
     })
     .json();

@@ -3,7 +3,11 @@ import { zValidator } from "@hono/zod-validator";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-import { task as taskTable, insertTasksSchema } from "@/db/schema";
+import {
+  task as taskTable,
+  insertTasksSchema,
+  user as userTable,
+} from "@/db/schema";
 import { db } from "@/db";
 
 export const taskRoutes = new Hono()
@@ -170,4 +174,63 @@ export const taskRoutes = new Hono()
         message: "Task moved successfully and positioned correctly",
       });
     },
-  );
+  )
+  // Toggle assigning a user to a task
+  .put("/:taskId{[0-9]+}/assign/:userId{[0-9]+}", async (c) => {
+    const taskId = Number(c.req.param("taskId"));
+    const userId = Number(c.req.param("userId"));
+
+    const task = await db
+      .select()
+      .from(taskTable)
+      .where(eq(taskTable.id, taskId))
+      .limit(1);
+
+    if (task.length === 0) {
+      c.status(404);
+      return c.json({
+        success: false,
+        message: "Task not found",
+      });
+    }
+
+    const user = await db
+      .select()
+      .from(userTable)
+      .where(eq(userTable.id, userId))
+      .limit(1);
+
+    if (user.length === 0) {
+      c.status(404);
+      return c.json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const currentTask = task[0];
+
+    if (currentTask.userId === userId) {
+      await db
+        .update(taskTable)
+        .set({ userId: null })
+        .where(eq(taskTable.id, taskId));
+
+      c.status(200);
+      return c.json({
+        success: true,
+        message: "User unassigned from task successfully",
+      });
+    } else {
+      await db
+        .update(taskTable)
+        .set({ userId })
+        .where(eq(taskTable.id, taskId));
+
+      c.status(200);
+      return c.json({
+        success: true,
+        message: "User assigned to task successfully",
+      });
+    }
+  });

@@ -4,7 +4,7 @@ import { useGetBoard } from "@/services";
 import { Board } from "@/components";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const Home = () => {
+const BoardPage = () => {
   const { data, isPending, isError, error } = useGetBoard(1);
 
   if (isPending) {
@@ -24,4 +24,4 @@ const Home = () => {
   return <Board board={data} />;
 };
 
-export default Home;
+export default BoardPage;

@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 
 import {
   Card,
@@ -16,6 +17,8 @@ import {
   Input,
   Button,
 } from "@/components";
+import { useLogin, useRegister } from "@/services";
+import { AuthResponseDto } from "@/services/dtos";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address").min(1, "Email is required"),
@@ -29,24 +32,38 @@ const registerSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-type LoginFormData = z.infer<typeof loginSchema>;
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 const Auth = () => {
   const searchParams = useSearchParams();
   const type = searchParams.get("type");
   const isLogin = type === "login" || type === null;
-
+  const login = useLogin();
+  const register = useRegister();
+  const router = useRouter();
   const {
-    register,
+    register: registerForm,
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(isLogin ? loginSchema : registerSchema),
   });
 
-  const onSubmit: SubmitHandler<LoginFormData | RegisterFormData> = (data) => {
-    console.log("Form Data:", data);
+  const handleResponse = (res: AuthResponseDto) => {
+    router.push("/board/1");
+    localStorage.setItem("token", res.token);
+  };
+
+  const onSubmit: SubmitHandler<RegisterFormData> = (data) => {
+    if (isLogin) {
+      login.mutateAsync(data).then((res) => {
+        handleResponse(res);
+      });
+    } else {
+      register.mutateAsync(data).then((res) => {
+        handleResponse(res);
+      });
+    }
   };
 
   return (
@@ -73,7 +90,7 @@ const Auth = () => {
                     <Input
                       id="first-name"
                       placeholder="Max"
-                      {...register("firstName")}
+                      {...registerForm("firstName")}
                     />
                     {errors.firstName && (
                       <p className="text-red-500 text-sm">
@@ -86,7 +103,7 @@ const Auth = () => {
                     <Input
                       id="last-name"
                       placeholder="Robinson"
-                      {...register("lastName")}
+                      {...registerForm("lastName")}
                     />
                     {errors.lastName && (
                       <p className="text-red-500 text-sm">
@@ -102,7 +119,7 @@ const Auth = () => {
                   id="email"
                   type="email"
                   placeholder="m@example.com"
-                  {...register("email")}
+                  {...registerForm("email")}
                 />
                 {errors.email && (
                   <p className="text-red-500 text-sm">
@@ -125,7 +142,7 @@ const Auth = () => {
                 <Input
                   id="password"
                   type="password"
-                  {...register("password")}
+                  {...registerForm("password")}
                 />
                 {errors.password && (
                   <p className="text-red-500 text-sm">
@@ -133,7 +150,11 @@ const Auth = () => {
                   </p>
                 )}
               </div>
-              <Button type="submit" className="w-full">
+              <Button
+                type="submit"
+                className="w-full"
+                isLoading={register.isPending || login.isPending}
+              >
                 {isLogin ? "Login" : "Create an account"}
               </Button>
             </div>
