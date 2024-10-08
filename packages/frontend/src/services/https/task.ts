@@ -40,3 +40,11 @@ export const reorderTasksInColumn = async (data: {
     json: { taskIds },
   });
 };
+
+export const assignUserToTask = async ({
+  userId,
+  taskId,
+}: {
+  taskId: number;
+  userId: number;
+}) => ky.put(`api/v1/tasks/${taskId}/assign/${userId}`);

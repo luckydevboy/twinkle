@@ -19,6 +19,11 @@ export interface IColumn {
 export interface ITask {
   id: number;
   content: string;
+  user?: {
+    id: number;
+    firstName: string;
+    lastName: string;
+  };
 }
 
 export interface IResponse<T> {

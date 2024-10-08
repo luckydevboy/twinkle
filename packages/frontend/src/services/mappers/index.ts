@@ -1,7 +1,7 @@
-import { IBoardDto } from "../dtos";
+import { BoardDto } from "../dtos";
 import { IBoard, IColumn, ITask } from "@/interfaces";
 
-export const mapBoardFromDto = (board: IBoardDto): IBoard => {
+export const mapBoardFromDto = (board: BoardDto): IBoard => {
   const tasks: { [key: string]: ITask } = {};
   const columns: { [key: string]: IColumn } = {};
   const columnOrder: number[] = [];
@@ -12,7 +12,7 @@ export const mapBoardFromDto = (board: IBoardDto): IBoard => {
     columnOrder[column.order - 1] = column.id;
 
     column.tasks.forEach((task) => {
-      tasks[task.id] = { id: task.id, content: task.name };
+      tasks[task.id] = { id: task.id, content: task.name, user: task.user };
       columns[column.id].taskIds[task.order] = task.id;
     });
     columns[column.id].taskIds = columns[column.id].taskIds.filter((id) => id);

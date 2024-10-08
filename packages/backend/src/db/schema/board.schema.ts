@@ -9,14 +9,15 @@ import { user } from "./user.schema";
 export const board = pgTable("board", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
-  userId: integer("user_id")
-    .references(() => user.id)
-    .notNull(),
+  userId: integer("user_id").notNull(),
 });
 
 export const boardRelations = relations(board, ({ many, one }) => ({
   columns: many(column),
-  user: one(user),
+  user: one(user, {
+    fields: [board.userId],
+    references: [user.id],
+  }),
 }));
 
 export const insertBoardSchema = createInsertSchema(board, {

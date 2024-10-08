@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 
 import {
+  assignUserToTask,
   createTask,
   deleteTask,
   editTask,
@@ -30,6 +31,9 @@ export const useReorderTasksInColumn = () => {
     mutationFn: reorderTasksInColumn,
   });
 };
+
+export const useAssignUserToTask = () =>
+  useMutation({ mutationFn: assignUserToTask });
 
 export const useMoveTaskToAnotherColumn = () => {
   return useMutation({

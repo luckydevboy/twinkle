@@ -1,6 +1,6 @@
 {
-  "id": "0694231c-97c3-4e9d-aefd-a1a176680ff7",
-  "prevId": "3d2120d0-86a7-463e-9d52-53f9a7bae5ca",
+  "id": "5479f9ba-f582-4aac-bc65-e81e235c3397",
+  "prevId": "77ffc835-5882-485f-ae1e-34b4cd5d29ab",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -28,21 +28,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "board_user_id_user_id_fk": {
-          "name": "board_user_id_user_id_fk",
-          "tableFrom": "board",
-          "tableTo": "user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -108,6 +94,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "order": {
           "name": "order",
           "type": "integer",
@@ -116,7 +108,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "task_user_id_user_id_fk": {
+          "name": "task_user_id_user_id_fk",
+          "tableFrom": "task",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
