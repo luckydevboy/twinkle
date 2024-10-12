@@ -12,16 +12,6 @@ import {
 import { db } from "@/db";
 
 export const boardRoutes = new Hono()
-  // Get boards
-  .get("/", async (c) => {
-    const boards = await db.select().from(boardsTable);
-
-    c.status(200);
-    return c.json({
-      success: true,
-      data: { boards },
-    });
-  })
   // Create board
   .post("/", zValidator("json", insertBoardSchema), async (c) => {
     const board = c.req.valid("json");

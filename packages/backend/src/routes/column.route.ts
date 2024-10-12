@@ -38,7 +38,7 @@ export const columnRoutes = new Hono()
       data: result[0],
     });
   })
-  // Update column name
+  // Update column
   .put(
     "/:id{[0-9]+}",
     zValidator("json", z.object({ name: z.string() })),
