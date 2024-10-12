@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "bun --watch src/index.ts",
+    "start": "bun src/index.ts",
     "migration:generate": "bun drizzle-kit generate",
     "migration:push": "bun run src/db/migrate.ts",
     "migrate": "bun drizzle-kit generate && bun run src/db/migrate.ts",

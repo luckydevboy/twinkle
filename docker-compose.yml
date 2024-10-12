@@ -1,5 +1,28 @@
-version: '3.8'
 services:
+  backend:
+    build:
+      context: .
+      target: backend
+    ports:
+      - "2000:2000"
+    volumes:
+      - ./backend:/app/packages/backend
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: .
+      target: frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app/packages/frontend
+    environment:
+      - NODE_ENV=development
+
   db:
     image: postgres
     restart: always
@@ -7,23 +30,7 @@ services:
       - ./postgres/db:/var/lib/postgresql/data
     ports:
       - 5432:5432
-
     environment:
       - POSTGRES_DB=twinkle
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=1234
-
-  frontend:
-    restart: unless-stopped
-    image: twinkle_frontend
-    init: true
-    expose:
-      - 3000
-    ports:
-      - '3000:3000'
-    build:
-      context: packages/frontend/Dockerfile
-      args:
-        CI: ${CI}
-    extra_hosts:
-      - host.docker.internal:host-gateway
