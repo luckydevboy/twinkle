@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 
 import {
   Card,
@@ -182,4 +183,12 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+const AuthPage = () => {
+  return (
+    <Suspense fallback={<>Loading...</>}>
+      <Auth />
+    </Suspense>
+  );
+};
+
+export default AuthPage;
