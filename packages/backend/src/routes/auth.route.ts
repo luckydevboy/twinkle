@@ -11,35 +11,45 @@ import { db } from "@/db";
 
 export const authRoutes = new Hono()
   .post("/register", zValidator("json", userSchema), async (c) => {
-    const { email, password, firstName, lastName } = c.req.valid("json");
+    try {
+      const { email, password, firstName, lastName } = c.req.valid("json");
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-    const result = await db
-      .insert(user)
-      .values({
-        email,
-        firstName,
-        lastName,
-        password: hashedPassword,
-      })
-      .returning({
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
+      const result = await db
+        .insert(user)
+        .values({
+          email,
+          firstName,
+          lastName,
+          password: hashedPassword,
+        })
+        .returning({
+          id: user.id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        });
+
+      const token = jwt.sign(
+        { id: result[0].id, email: result[0].email },
+        process.env.JWT_SECRET,
+      );
+
+      c.status(201);
+      return c.json({
+        success: true,
+        token,
       });
-
-    const token = jwt.sign(
-      { id: result[0].id, email: result[0].email },
-      process.env.JWT_SECRET,
-    );
-
-    c.status(201);
-    return c.json({
-      success: true,
-      token,
-    });
+    } catch (e: any) {
+      return c.json(
+        {
+          success: false,
+          message: e.message,
+        },
+        500,
+      );
+    }
   })
   .post("/login", zValidator("json", loginSchema), async (c) => {
     const { email, password } = c.req.valid("json");
