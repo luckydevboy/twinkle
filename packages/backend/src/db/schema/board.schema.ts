@@ -9,7 +9,7 @@ import { user } from "./user.schema";
 export const board = pgTable("board", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
-  userId: integer("user_id").notNull(),
+  userId: integer("user_id"),
 });
 
 export const boardRelations = relations(board, ({ many, one }) => ({
@@ -22,5 +22,6 @@ export const boardRelations = relations(board, ({ many, one }) => ({
 
 export const insertBoardSchema = createInsertSchema(board, {
   name: z.string().min(1).max(20),
+  userId: z.undefined(),
 });
 export const selectBoardSchema = createSelectSchema(board);

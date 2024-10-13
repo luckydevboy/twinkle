@@ -15,6 +15,13 @@
       "when": 1728332135392,
       "tag": "0001_sleepy_darwin",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1728726667567,
+      "tag": "0002_light_quicksilver",
+      "breakpoints": true
     }
   ]
 }

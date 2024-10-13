@@ -16,7 +16,10 @@ export const boardRoutes = new Hono()
   .post("/", zValidator("json", insertBoardSchema), async (c) => {
     const board = c.req.valid("json");
 
-    const result = await db.insert(boardsTable).values(board).returning();
+    const result = await db
+      .insert(boardsTable)
+      .values(board)
+      .returning({ name: boardsTable.name });
 
     c.status(201);
     return c.json({
