@@ -44,3 +44,5 @@ packages/backend/.env*
 postgres
 
 node_modules
+
+.env

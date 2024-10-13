@@ -1,7 +1,7 @@
 import ky from "ky";
 
 const original = ky.create({
-  prefixUrl: "http://localhost:2000",
+  prefixUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
   hooks: {
     beforeRequest: [
       (request) => {
