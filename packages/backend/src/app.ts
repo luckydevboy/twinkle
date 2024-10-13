@@ -15,7 +15,13 @@ const app = new Hono();
 
 app.use(logger());
 
-app.use("/api/v1/*", cors());
+app.use(
+  "/api/v1/*",
+  cors({
+    origin: process.env.ALLOWED_ORIGIN!,
+    allowMethods: ["GET", "POST", "PUT", "DELETE"],
+  }),
+);
 
 app.use(
   "/api/v1/boards/*",
