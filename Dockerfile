@@ -24,6 +24,9 @@ COPY --from=base /app/packages/backend ./
 # Expose the port (assuming your backend runs on port 3000)
 EXPOSE 3000
 
+# Run database migration before starting the backend
+RUN bun run migrate
+
 # Command to start the backend
 CMD ["bun", "start"]
 
@@ -53,7 +56,7 @@ FROM base as final
 WORKDIR /app
 
 # Expose both frontend and backend ports
-EXPOSE 3000 3001
+EXPOSE 3000 2000
 
 # Optionally run both frontend and backend concurrently
 CMD ["sh", "-c", "cd /app/pacakges/backend && bun run src/index.ts & cd /app/packages/frontend && npm run start"]
