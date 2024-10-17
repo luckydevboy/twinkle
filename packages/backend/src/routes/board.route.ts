@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { eq } from "drizzle-orm";
+import type { JwtVariables } from "hono/jwt";
 
 import {
   board as boardsTable,
@@ -11,14 +12,18 @@ import {
 } from "@/db/schema";
 import { db } from "@/db";
 
-export const boardRoutes = new Hono()
+// TODO: declare Variables in a separate file
+type Variables = JwtVariables<{ id: number; email: string }>;
+
+export const boardRoutes = new Hono<{ Variables: Variables }>()
   // Create board
   .post("/", zValidator("json", insertBoardSchema), async (c) => {
     const board = c.req.valid("json");
+    const userId = c.get("jwtPayload").id;
 
     const result = await db
       .insert(boardsTable)
-      .values(board)
+      .values({ ...board, userId })
       .returning({ name: boardsTable.name });
 
     c.status(201);
@@ -28,6 +33,20 @@ export const boardRoutes = new Hono()
         board: result,
       },
     });
+  })
+  .get("/", async (c) => {
+    try {
+      const userId = c.get("jwtPayload").id;
+
+      const boards = await db
+        .select()
+        .from(boardsTable)
+        .where(eq(boardsTable.userId, userId));
+
+      return c.json({ success: true, data: { boards } });
+    } catch (e: any) {
+      return c.json({ success: false, message: e });
+    }
   })
   // Get board by ID
   .get(":id{[0-9]+}", async (c) => {

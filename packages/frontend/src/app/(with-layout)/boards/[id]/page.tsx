@@ -3,9 +3,13 @@
 import { useGetBoard } from "@/services";
 import { Board } from "@/components";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useParams } from "next/navigation";
 
 const BoardPage = () => {
-  const { data, isPending, isError, error } = useGetBoard(1);
+  const params = useParams();
+  const { data, isPending, isError, error } = useGetBoard(
+    Number(Number(params.id)),
+  );
 
   if (isPending) {
     return (

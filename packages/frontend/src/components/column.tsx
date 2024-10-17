@@ -6,6 +6,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { cx } from "class-variance-authority";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { useParams } from "next/navigation";
 
 import {
   Button,
@@ -44,6 +45,7 @@ const Column = ({ column, tasks, index }: Props) => {
   const queryClient = useQueryClient();
   const titleInputRef = useRef<HTMLInputElement>(null);
   const deleteColumn = useDeleteColumn();
+  const params = useParams();
 
   const handleAddNewTask = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -56,7 +58,9 @@ const Column = ({ column, tasks, index }: Props) => {
       })
       .then(() => {
         handleClose();
-        queryClient.invalidateQueries({ queryKey: ["boards", 1] });
+        queryClient.invalidateQueries({
+          queryKey: ["boards", Number(params.id)],
+        });
       });
   };
 
@@ -76,7 +80,9 @@ const Column = ({ column, tasks, index }: Props) => {
 
   const handleDelete = () => {
     deleteColumn.mutateAsync(column.id).then(() => {
-      queryClient.invalidateQueries({ queryKey: ["boards", 1] });
+      queryClient.invalidateQueries({
+        queryKey: ["boards", Number(params.id)],
+      });
     });
   };
 

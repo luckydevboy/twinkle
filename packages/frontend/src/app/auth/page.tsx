@@ -51,7 +51,7 @@ const Auth = () => {
   });
 
   const handleResponse = (res: AuthResponseDto) => {
-    router.push("/board/1");
+    router.push("/boards");
     localStorage.setItem("token", res.token);
   };
 

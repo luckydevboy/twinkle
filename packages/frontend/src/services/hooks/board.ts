@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getBoard } from "@/services";
+import { getBoard, getBoards } from "@/services";
 import { mapBoardFromDto } from "../mappers";
 
 export const useGetBoard = (id: number) => {
@@ -10,3 +10,10 @@ export const useGetBoard = (id: number) => {
     select: (res) => mapBoardFromDto(res.data),
   });
 };
+
+export const useGetBoards = () =>
+  useQuery({
+    queryKey: ["boards"],
+    queryFn: getBoards,
+    select: (res) => res.data.boards,
+  });

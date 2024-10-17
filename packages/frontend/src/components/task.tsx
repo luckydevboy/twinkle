@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { CheckIcon } from "@radix-ui/react-icons";
 import { cx } from "class-variance-authority";
+import { useParams } from "next/navigation";
 
 import {
   Avatar,
@@ -38,16 +39,21 @@ const Task = ({ task, index }: Props) => {
   const queryClient = useQueryClient();
   const { data: users } = useGetUsers();
   const assignUserToTask = useAssignUserToTask();
+  const params = useParams();
 
   const handleDelete = () => {
     deleteTask.mutateAsync(task.id).then(() => {
-      queryClient.invalidateQueries({ queryKey: ["boards", 1] });
+      queryClient.invalidateQueries({
+        queryKey: ["boards", Number(params.id)],
+      });
     });
   };
 
   const handleAssign = (userId: number) => {
     assignUserToTask.mutateAsync({ taskId: task.id, userId }).then(() => {
-      queryClient.invalidateQueries({ queryKey: ["boards", 1] });
+      queryClient.invalidateQueries({
+        queryKey: ["boards", Number(params.id)],
+      });
     });
   };
 
