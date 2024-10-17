@@ -10,5 +10,4 @@ export * from "./separator";
 export * from "./scroll-area";
 export * from "./textarea";
 export * from "./label";
-export * from "./breadcrumb";
 export * from "./skeleton";
