@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { Button, DarkModeToggle, Separator } from "@/components";
 
@@ -11,10 +12,12 @@ const Layout = ({
   children: ReactNode;
 }>) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const handleLogout = () => {
+    queryClient.clear();
     localStorage.removeItem("token");
-    router.push("/auth?type=login");
+    router.push("/auth");
   };
 
   return (
